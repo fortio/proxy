@@ -56,7 +56,7 @@ func main() {
 
 	m := http.NewServeMux()
 	s := &http.Server{Handler: m} // TODO: timeouts etc
-	m.HandleFunc("/", fhttp.LogAndCall("debug", fhttp.DebugHandler))
+	m.HandleFunc("/", fhttp.DebugHandler)
 	acert := &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: hostPolicy,
