@@ -39,9 +39,10 @@ func Director(req *http.Request) {
 	routes := GetRoutes()
 	log.LogVf("Directing %v", req)
 	for _, route := range routes {
-		log.LogVf("Evaluating %v", routes)
+		log.LogVf("Evaluating %v", route)
 		if req.Host == route.Host || route.Host == "*" {
 			setDestination(req, &route.Destination.URL)
+			return
 		}
 	}
 }
