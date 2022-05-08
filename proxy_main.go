@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"runtime/debug"
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
@@ -19,6 +20,8 @@ func main() {
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 
 	log.Infof("Fortio Proxy %s starting", version)
+	binfo, _ := debug.ReadBuildInfo()
+	log.Infof("Buildinfo: %s", binfo.String())
 	flag.Parse()
 	if *configDir != "" {
 		if _, err := configmap.Setup(flag.CommandLine, *configDir); err != nil {
