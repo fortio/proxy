@@ -1,3 +1,4 @@
 
 test:
-	go run -race . -config sampleConfig/ -version -port :8443
+	go run -race . -version
+	go run -race . -config sampleConfig/ -port :8443
