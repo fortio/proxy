@@ -18,21 +18,12 @@ import (
 	"fortio.org/proxy/config"
 )
 
-func found(needle string, haystack []string) bool {
-	for _, v := range haystack {
-		if needle == v {
-			return true
-		}
-	}
-	return false
-}
-
 func main() {
 	configs := dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
 	fullVersion := flag.Bool("version", false, "Show full version info")
-	certsFor := dflag.DynStringSlice(flag.CommandLine, "certs-domains", []string{}, "Which domains to get certs for")
+	certsFor := dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
 	certsDirectory := flag.String("certs-directory", ".", "Directory `path` where to store the certs")
-	port := flag.String("port", ":443", "binding port")
+	port := flag.String("port", ":443", "`port` to listen on")
 	configDir := flag.String("config", "",
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	flag.Parse()
@@ -55,8 +46,8 @@ func main() {
 	}
 	hostPolicy := func(ctx context.Context, host string) error {
 		log.Infof("cert host policy called for %q", host)
-		allowed := certsFor.Get() // todo put it in a map maybe
-		if found(host, allowed) {
+		allowed := certsFor.Get()
+		if _, found := allowed[host]; found {
 			return nil
 		}
 		return fmt.Errorf("acme/autocert: only %v are is allowed", allowed)
