@@ -64,7 +64,7 @@ func main() {
 		Email:      *email,
 	}
 	debugGetCert := func(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
-		log.Infof("Called get cert with %+v", hello)
+		log.Infof("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
 		return acert.GetCertificate(hello)
 	}
 	s.Addr = *port
