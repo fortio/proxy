@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"runtime"
 	"runtime/debug"
 
 	"fortio.org/fortio/dflag"
@@ -16,12 +17,11 @@ func main() {
 	configDir := flag.String("config", "",
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	flag.Parse()
-	version := "unknown"
 	binfo, ok := debug.ReadBuildInfo()
-	if ok {
-		version = binfo.Main.Version
+	if !ok {
+		log.Fatalf("Unexpected to be unable to get BuildInfo")
 	}
-	log.Infof("Fortio Proxy %s starting", version)
+	log.Infof("Fortio Proxy %s (%s %s %s) starting", binfo.Main.Version, binfo.GoVersion, runtime.GOARCH, runtime.GOOS)
 	if *fullVersion {
 		log.Infof("Buildinfo: %s", binfo.String())
 	}

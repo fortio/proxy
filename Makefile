@@ -1,3 +1,3 @@
 
 test:
-	go run -race . -config sampleConfig/
+	go run -race . -config sampleConfig/ -version
