@@ -20,6 +20,7 @@ import (
 
 func main() {
 	configs := dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
+	email := flag.String("email", "", "`Email` to attach to cert requests.")
 	fullVersion := flag.Bool("version", false, "Show full version info")
 	certsFor := dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
 	certsDirectory := flag.String("certs-directory", ".", "Directory `path` where to store the certs")
@@ -60,14 +61,24 @@ func main() {
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: hostPolicy,
 		Cache:      autocert.DirCache(*certsDirectory),
+		Email:      *email,
 	}
 	debugGetCert := func(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 		log.Infof("Called get cert with %+v", hello)
 		return acert.GetCertificate(hello)
 	}
 	s.Addr = *port
-	s.TLSConfig = &tls.Config{GetCertificate: debugGetCert}
-	log.Infof("Starting TLS on %s", *port)
+	tlsCfg := acert.TLSConfig()
+	tlsCfg.GetCertificate = debugGetCert
+	s.TLSConfig = tlsCfg
+	currentMap := certsFor.Get()
+	currentDomains := make([]string, len(currentMap))
+	i := 0
+	for k := range currentMap {
+		currentDomains[i] = k
+		i++
+	}
+	log.Infof("Starting TLS on %s for %v", *port, currentDomains)
 	err := s.ListenAndServeTLS("", "")
 	if err != nil {
 		log.Fatalf("ListendAndServeTLS(): %v", err)
