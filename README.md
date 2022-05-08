@@ -10,4 +10,5 @@ using golang 1.18+
 
 ```
 go install fortio.org/proxy@latest
+sudo setcap CAP_NET_BIND_SERVICE=+eip `which proxy`
 ```
