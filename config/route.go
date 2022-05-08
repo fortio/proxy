@@ -10,10 +10,9 @@ type JSONURL struct {
 }
 
 // Route configuration. for now only does Host match to destination, see Director function.
+// (only host,port,scheme part of Destination URL are used)
 type Route struct {
 	Host        string
-	ExactPath   string
-	Prefix      string
 	Destination JSONURL
 }
 

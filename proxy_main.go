@@ -1,3 +1,8 @@
+// Fortio TLS Reverse Proxy.
+//
+// (c) 2022 Laurent Demailly
+// See LICENSE
+
 package main
 
 import (
@@ -14,6 +19,7 @@ import (
 	"time"
 
 	"golang.org/x/crypto/acme/autocert"
+	"golang.org/x/net/http2"
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
@@ -57,6 +63,7 @@ func main() {
 	redirect := flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	configDir := flag.String("config", "",
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
+	httpPort := flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	flag.Parse()
 	binfo, ok := debug.ReadBuildInfo()
 	if !ok {
@@ -87,7 +94,10 @@ func main() {
 	for _, r := range GetRoutes() {
 		log.Infof("%q -> %s", r.Host, r.Destination.URL.String())
 	}
-	rp := httputil.ReverseProxy{Director: Director}
+	rp := httputil.ReverseProxy{
+		Director:  Director,
+		Transport: &http2.Transport{}, // otherwise grpc doesn't work
+	}
 	s := &http.Server{
 		// TODO: make these timeouts configurable
 		ReadTimeout:       6 * time.Second,
@@ -96,6 +106,9 @@ func main() {
 		ReadHeaderTimeout: 3 * time.Second,
 		// The reverse proxy
 		Handler: &rp,
+	}
+	if *httpPort != "disabled" {
+		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, &rp)
 	}
 	acert := &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
@@ -106,6 +119,9 @@ func main() {
 	debugGetCert := func(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 		log.Infof("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
 		return acert.GetCertificate(hello)
+	}
+	if *port == "disabled" {
+		select {}
 	}
 	s.Addr = *port
 	tlsCfg := acert.TLSConfig()
