@@ -17,6 +17,7 @@ import (
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
+	"fortio.org/fortio/fhttp"
 	"fortio.org/fortio/log"
 	"fortio.org/proxy/config"
 )
@@ -52,7 +53,8 @@ func main() {
 	fullVersion := flag.Bool("version", false, "Show full version info and exit.")
 	certsFor := dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
 	certsDirectory := flag.String("certs-directory", ".", "Directory `path` where to store the certs")
-	port := flag.String("port", ":443", "`port` to listen on")
+	port := flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
+	redirect := flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	configDir := flag.String("config", "",
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	flag.Parse()
@@ -77,6 +79,9 @@ func main() {
 			return nil
 		}
 		return fmt.Errorf("acme/autocert: only %v are is allowed", allowed)
+	}
+	if *redirect != "disabled" {
+		fhttp.RedirectToHTTPS(*redirect)
 	}
 	log.Infof("Initial Routes:")
 	for _, r := range GetRoutes() {
