@@ -1,0 +1,8 @@
+[
+  {
+    "host": "foo"
+  },
+  {
+    "prefix": "/blah"
+  }
+]
