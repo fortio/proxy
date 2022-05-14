@@ -14,8 +14,6 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
-	"runtime"
-	"runtime/debug"
 	"time"
 
 	"golang.org/x/crypto/acme/autocert"
@@ -24,6 +22,7 @@ import (
 	"fortio.org/fortio/dflag/configmap"
 	"fortio.org/fortio/fhttp"
 	"fortio.org/fortio/log"
+	"fortio.org/fortio/version"
 	"fortio.org/proxy/config"
 )
 
@@ -64,13 +63,9 @@ func main() {
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort := flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	flag.Parse()
-	binfo, ok := debug.ReadBuildInfo()
-	if !ok {
-		log.Fatalf("Unexpected to be unable to get BuildInfo")
-	}
-	log.Infof("Fortio Proxy %s (%s %s %s) starting", binfo.Main.Version, binfo.GoVersion, runtime.GOARCH, runtime.GOOS)
+	log.Infof("Fortio Proxy %s starting", version.Long())
 	if *fullVersion {
-		log.Infof("Buildinfo: %s", binfo.String())
+		fmt.Print(version.Full())
 		os.Exit(0)
 	}
 	if *configDir != "" {
