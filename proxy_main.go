@@ -63,7 +63,7 @@ func main() {
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort := flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	flag.Parse()
-	_, longV, fullV := version.VersionsFromBuildInfo()
+	_, longV, fullV := version.FromBuildInfo()
 	log.Infof("Fortio Proxy %s starting", longV)
 	if *fullVersion {
 		fmt.Print(fullV)
