@@ -40,11 +40,12 @@ func GetRoutes() []config.Route {
 func setDestination(req *http.Request, url *url.URL) {
 	req.URL.Scheme = url.Scheme
 	req.URL.Host = url.Host
+	req.Proto = "HTTP/1.1"
 }
 
 func Director(req *http.Request) {
 	routes := GetRoutes()
-	log.LogVf("Directing %v", req)
+	log.LogVf("Directing %+v", req)
 	for _, route := range routes {
 		log.LogVf("Evaluating req %q vs route %q for dest %s", req.Host, route.Host, route.Destination.URL.String())
 		if req.Host == route.Host || route.Host == "*" {
