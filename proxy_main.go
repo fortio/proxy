@@ -19,7 +19,6 @@ import (
 	"time"
 
 	"golang.org/x/crypto/acme/autocert"
-	"golang.org/x/net/http2"
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
@@ -40,7 +39,6 @@ func GetRoutes() []config.Route {
 func setDestination(req *http.Request, url *url.URL) {
 	req.URL.Scheme = url.Scheme
 	req.URL.Host = url.Host
-	req.Proto = "HTTP/1.1"
 }
 
 func Director(req *http.Request) {
@@ -96,8 +94,8 @@ func main() {
 		log.Infof("%q -> %s", r.Host, r.Destination.URL.String())
 	}
 	rp := httputil.ReverseProxy{
-		Director:  Director,
-		Transport: &http2.Transport{}, // otherwise grpc doesn't work
+		Director: Director,
+		// doesn't work: Transport: &http2.Transport{}, // otherwise grpc doesn't work
 	}
 	s := &http.Server{
 		// TODO: make these timeouts configurable
