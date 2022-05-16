@@ -25,6 +25,8 @@ type Route struct {
 	Destination JSONURL
 }
 
+// UnmarshalJSON is needed to get a URL from json
+// until golang does it on its own.
 func (j *JSONURL) UnmarshalJSON(b []byte) error {
 	l := len(b)
 	if l == 0 {
@@ -37,7 +39,8 @@ func (j *JSONURL) UnmarshalJSON(b []byte) error {
 	return j.URL.UnmarshalBinary(b[1:l])
 }
 
-// Match checks if there is a match.
+// Match checks if there is a match. Port 0/unspecified matches.
+// Otherwise has to match and host has to match or route spec be "*".
 func (r *Route) Match(req *http.Request) bool {
 	portStr := req.URL.Port()
 	hostFromReq := req.URL.Host
@@ -71,8 +74,5 @@ func (r *Route) Match(req *http.Request) bool {
 	if r.Host == "*" {
 		return true
 	}
-	if r.Host == hostFromReq {
-		return true
-	}
-	return false
+	return r.Host == hostFromReq
 }
