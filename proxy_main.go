@@ -95,7 +95,8 @@ func main() {
 	rp := httputil.ReverseProxy{
 		Director: Director,
 	}
-	// TODO: make this more dynamic based on route config instead of all or nothing
+	// TODO: make h2c vs regular client more dynamic based on route config instead of all or nothing
+	// (or maybe some day it will just ge the default behavior of the base http client)
 	if *h2Target {
 		rp.Transport = &http2.Transport{
 			AllowHTTP: true,
