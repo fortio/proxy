@@ -10,6 +10,7 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
+	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -17,6 +18,7 @@ import (
 	"time"
 
 	"golang.org/x/crypto/acme/autocert"
+	"golang.org/x/net/http2"
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
@@ -62,6 +64,7 @@ func main() {
 	configDir := flag.String("config", "",
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort := flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
+	h2Target := flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
 	flag.Parse()
 	_, longV, fullV := version.FromBuildInfo()
 	log.Infof("Fortio Proxy %s starting", longV)
@@ -91,7 +94,15 @@ func main() {
 	}
 	rp := httputil.ReverseProxy{
 		Director: Director,
-		// doesn't work: Transport: &http2.Transport{}, // otherwise grpc doesn't work
+	}
+	// TODO: make this more dynamic based on route config instead of all or nothing
+	if *h2Target {
+		rp.Transport = &http2.Transport{
+			AllowHTTP: true,
+			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
+				return net.Dial(network, addr)
+			},
+		}
 	}
 	s := &http.Server{
 		// TODO: make these timeouts configurable
