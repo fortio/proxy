@@ -1,8 +1,8 @@
 fortio.org/fortio v1.31.0 h1:5pwFhai6GNFTKiacKlWF3oRjoveFdMCCoqGoSDyFmIA=
 fortio.org/fortio v1.31.0/go.mod h1:bubI7klquaD4ypIby16LHMvoH+7lp20NvzALgN4/xlM=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
-github.com/fortio/golang-net v0.0.0-20220519234753-9259fd44fa73 h1:Be4/PrR/2GBcLx+lMwu0vo+hH6vq8KcUW1kNCgtcyz0=
-github.com/fortio/golang-net v0.0.0-20220519234753-9259fd44fa73/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=
+github.com/fortio/net v0.0.0-20220521233046-9a5c58aa1acd h1:lT0jxh/LaDTzmaQGM/jewMobdE3DLt5ZP6A2aVv2rnA=
+github.com/fortio/net v0.0.0-20220521233046-9a5c58aa1acd/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=
 github.com/fsnotify/fsnotify v1.5.4 h1:jRbGcIw6P2Meqdwuo0H1p6JVLbL5DHKAKlYndzMwVZI=
 github.com/fsnotify/fsnotify v1.5.4/go.mod h1:OVB6XrOHzAwXMpEM7uPOzcehqUV2UqJxmVXmkdnm1bU=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=

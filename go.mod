@@ -16,4 +16,4 @@ require (
 
 )
 
-replace golang.org/x/net => github.com/fortio/golang-net v0.0.0-20220519234753-9259fd44fa73 // Has https://go.dev/cl/407454
+replace golang.org/x/net => github.com/fortio/net v0.0.0-20220521233046-9a5c58aa1acd // Has https://go.dev/cl/407454
