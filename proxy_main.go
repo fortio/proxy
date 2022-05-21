@@ -46,8 +46,9 @@ func Director(req *http.Request) {
 	routes := GetRoutes()
 	log.LogVf("Directing %+v", req)
 	for _, route := range routes {
-		log.LogVf("Evaluating req %q vs route %q for dest %s", req.Host, route.Host, route.Destination.URL.String())
-		if route.Match(req) {
+		log.LogVf("Evaluating req %q vs route %q and path %q vs prefix %q for dest %s",
+			req.Host, route.Host, req.URL.Path, route.Prefix, route.Destination.URL.String())
+		if route.MatchServerReq(req) {
 			setDestination(req, &route.Destination.URL)
 			return
 		}

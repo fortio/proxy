@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"fortio.org/fortio/log"
@@ -14,13 +13,13 @@ type JSONURL struct {
 	URL url.URL
 }
 
-// Route configuration. for now only does Host match to destination, see Director function.
+// Route configuration. Does Host/Prefix match to destination, see Match* functions.
 // (only host,port,scheme part of Destination URL are used)
 type Route struct {
-	// Host or * to match any host (* must be the last rule)
+	// Host or * or empty to match any host (* without a Prefix must be the last rule)
 	Host string
-	// Port or 0/not specified for any port
-	Port uint
+	// Prefix or empty for any
+	Prefix string
 	// Destination url string.
 	Destination JSONURL
 }
@@ -39,40 +38,26 @@ func (j *JSONURL) UnmarshalJSON(b []byte) error {
 	return j.URL.UnmarshalBinary(b[1:l])
 }
 
-// Match checks if there is a match. Port 0/unspecified matches.
-// Otherwise has to match and host has to match or route spec be "*".
-func (r *Route) Match(req *http.Request) bool {
-	portStr := req.URL.Port()
-	hostFromReq := req.URL.Host
-	idx := strings.LastIndex(hostFromReq, ":")
-	if idx != -1 && hostFromReq[len(hostFromReq)-1] != ']' {
-		p := hostFromReq[idx+1:]
-		if p != portStr && portStr != "" {
-			log.Warnf("unexoected port missmatch %q vs %q", p, portStr)
-		}
-		portStr = p
-		hostFromReq = hostFromReq[:idx]
-		log.Infof("changing host to %q", hostFromReq)
+// Match checks if there is a match.
+// Path prefix has to match (or be empty)
+// Host has to match or route spec be "*" (last entry).
+
+func (r *Route) MatchServerReq(req *http.Request) bool {
+	// Server requests have host:port in req.Host (and nothing host/port related in req.URL)
+	return r.MatchHostAndPath(req.Host, req.URL.Path)
+}
+func (r *Route) MatchHostAndPath(hostPort, path string) bool {
+	host := hostPort
+	idx := strings.LastIndex(hostPort, ":")
+	if idx != -1 && hostPort[len(hostPort)-1] != ']' { // could be [:some:ip:v6:addr] without :port
+		host = hostPort[:idx]
 	}
-	var port uint
-	if portStr != "" {
-		p, err := strconv.Atoi(portStr)
-		if err != nil {
-			log.Errf("Unexpected unable to convert %q to port: %v", portStr, err)
-		}
-		port = uint(p)
-	} else {
-		port = 80
-		if req.URL.Scheme == "https" {
-			port = 443
-		}
-	}
-	log.Infof("port is %q scheme %s -> %d - req url host is %q", portStr, req.URL.Scheme, port, req.URL.Host)
-	if r.Port != 0 && port != r.Port {
+	log.Infof("path is %q. req host is %q -> %q", path, hostPort, host)
+	if r.Prefix != "" && !strings.HasPrefix(path, r.Prefix) {
 		return false
 	}
-	if r.Host == "*" {
+	if r.Host == "" || r.Host == "*" {
 		return true
 	}
-	return r.Host == hostFromReq
+	return r.Host == host
 }

@@ -4,6 +4,12 @@ test:
 	go run -race . -version
 	go run -race . -config sampleConfig/ -redirect-port :8080 -https-port :8443
 
+
+dev-prefix:
+	go run -race . -h2 -http-port 8001 -https-port disabled -redirect-port disabled\
+		-loglevel debug \
+		-routes.json '[{"prefix":"/fgrpc", "destination":"http://localhost:8079/"}, {"host":"*", "destination":"http://localhost:8080/"}]'
+
 dev-grpc:
 	go run -race . -h2 -http-port 8001 -https-port disabled -redirect-port disabled\
 		-loglevel debug \
