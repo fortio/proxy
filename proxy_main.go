@@ -128,6 +128,7 @@ func main() {
 		return acert.GetCertificate(hello)
 	}
 	if *port == "disabled" {
+		log.Infof("No TLS server port.")
 		select {}
 	}
 	s.Addr = *port
