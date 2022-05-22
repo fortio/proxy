@@ -85,7 +85,7 @@ func main() {
 		if _, found := allowed[host]; found {
 			return nil
 		}
-		return fmt.Errorf("acme/autocert: only %v are is allowed", allowed)
+		return fmt.Errorf("acme/autocert: %q not in allowed list", host)
 	}
 	if *redirect != "disabled" {
 		fhttp.RedirectToHTTPS(*redirect)
