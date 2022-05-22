@@ -1,5 +1,5 @@
-fortio.org/fortio v1.32.0-test-2 h1:/Q357Z6ptCDrXGWcEtb16ltzBAlw1gz6LrUzuqNnYVY=
-fortio.org/fortio v1.32.0-test-2/go.mod h1:bubI7klquaD4ypIby16LHMvoH+7lp20NvzALgN4/xlM=
+fortio.org/fortio v1.32.0 h1:d5Q3ZuAfHlUU9CMBt9gVFpUItkupfxqCT3S0qtrvgqA=
+fortio.org/fortio v1.32.0/go.mod h1:bubI7klquaD4ypIby16LHMvoH+7lp20NvzALgN4/xlM=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/fortio/net v0.0.0-20220521234057-cd8eba16ed62 h1:+iT5cB0+ghqquEovLJMvmuYl4ffAfZ3AjJsTQUpXbRE=
 github.com/fortio/net v0.0.0-20220521234057-cd8eba16ed62/go.mod h1:1FoLXnfARrQBJJPoH1vZrQ0aybjyeCLcYnw8HTNByX4=
