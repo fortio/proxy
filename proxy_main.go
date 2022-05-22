@@ -56,17 +56,29 @@ func Director(req *http.Request) {
 	}
 }
 
-func main() {
-	email := flag.String("email", "", "`Email` to attach to cert requests.")
-	fullVersion := flag.Bool("version", false, "Show full version info and exit.")
-	certsFor := dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
-	certsDirectory := flag.String("certs-directory", ".", "Directory `path` where to store the certs")
-	port := flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
-	redirect := flag.String("redirect-port", ":80", "`port` to listen on for redirection")
-	configDir := flag.String("config", "",
+var (
+	email          = flag.String("email", "", "`Email` to attach to cert requests.")
+	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
+	certsFor       = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
+	certsDirectory = flag.String("certs-directory", ".", "Directory `path` where to store the certs")
+	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
+	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
+	configDir      = flag.String("config", "",
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
-	httpPort := flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
-	h2Target := flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
+	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
+	h2Target = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
+)
+
+func hostPolicy(ctx context.Context, host string) error {
+	log.LogVf("cert host policy called for %q", host)
+	allowed := certsFor.Get()
+	if _, found := allowed[host]; found {
+		return nil
+	}
+	return fmt.Errorf("acme/autocert: %q not in allowed list", host)
+}
+
+func main() {
 	flag.Parse()
 	_, longV, fullV := version.FromBuildInfo()
 	log.Infof("Fortio Proxy %s starting", longV)
@@ -78,14 +90,6 @@ func main() {
 		if _, err := configmap.Setup(flag.CommandLine, *configDir); err != nil {
 			log.Critf("Unable to watch config/flag changes in %v: %v", *configDir, err)
 		}
-	}
-	hostPolicy := func(ctx context.Context, host string) error {
-		log.LogVf("cert host policy called for %q", host)
-		allowed := certsFor.Get()
-		if _, found := allowed[host]; found {
-			return nil
-		}
-		return fmt.Errorf("acme/autocert: %q not in allowed list", host)
 	}
 	if *redirect != "disabled" {
 		fhttp.RedirectToHTTPS(*redirect)
@@ -136,6 +140,7 @@ func main() {
 	s.Addr = *port
 	tlsCfg := acert.TLSConfig()
 	tlsCfg.GetCertificate = debugGetCert
+	tlsCfg.MinVersion = tls.VersionTLS12
 	s.TLSConfig = tlsCfg
 	currentMap := certsFor.Get()
 	currentDomains := make([]string, len(currentMap))
