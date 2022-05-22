@@ -10,6 +10,7 @@ import (
 )
 
 type JSONURL struct {
+	Str string
 	URL url.URL
 }
 
@@ -35,6 +36,7 @@ func (j *JSONURL) UnmarshalJSON(b []byte) error {
 	if l == 0 || b[0] != '"' || b[l] != '"' {
 		return fmt.Errorf("invalid url string %q", b)
 	}
+	j.Str = "Proxy to " + string(b[1:l])
 	return j.URL.UnmarshalBinary(b[1:l])
 }
 
@@ -52,7 +54,7 @@ func (r *Route) MatchHostAndPath(hostPort, path string) bool {
 	if idx != -1 && hostPort[len(hostPort)-1] != ']' { // could be [:some:ip:v6:addr] without :port
 		host = hostPort[:idx]
 	}
-	log.Infof("path is %q. req host is %q -> %q", path, hostPort, host)
+	log.LogVf("path is %q. req host is %q -> %q", path, hostPort, host)
 	if r.Prefix != "" && !strings.HasPrefix(path, r.Prefix) {
 		return false
 	}

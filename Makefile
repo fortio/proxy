@@ -2,7 +2,7 @@
 test:
 	go test -race ./...
 	go run -race . -version
-	go run -race . -config sampleConfig/ -redirect-port :8080 -https-port :8443
+	go run -race . -h2 -config sampleConfig/ -redirect-port :8081 -https-port :8443 -http-port :8001
 
 
 dev-prefix:

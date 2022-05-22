@@ -49,6 +49,7 @@ func Director(req *http.Request) {
 		log.LogVf("Evaluating req %q vs route %q and path %q vs prefix %q for dest %s",
 			req.Host, route.Host, req.URL.Path, route.Prefix, route.Destination.URL.String())
 		if route.MatchServerReq(req) {
+			fhttp.LogRequest(req, route.Destination.Str)
 			setDestination(req, &route.Destination.URL)
 			return
 		}
@@ -79,7 +80,7 @@ func main() {
 		}
 	}
 	hostPolicy := func(ctx context.Context, host string) error {
-		log.Infof("cert host policy called for %q", host)
+		log.LogVf("cert host policy called for %q", host)
 		allowed := certsFor.Get()
 		if _, found := allowed[host]; found {
 			return nil
@@ -91,7 +92,7 @@ func main() {
 	}
 	log.Infof("Initial Routes:")
 	for _, r := range GetRoutes() {
-		log.Infof("%q -> %s", r.Host, r.Destination.URL.String())
+		log.Infof("host %q\t prefix %q\t -> %s", r.Host, r.Prefix, r.Destination.URL.String())
 	}
 	rp := httputil.ReverseProxy{
 		Director: Director,
@@ -125,7 +126,7 @@ func main() {
 		Email:      *email,
 	}
 	debugGetCert := func(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
-		log.Infof("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
+		log.LogVf("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
 		return acert.GetCertificate(hello)
 	}
 	if *port == "disabled" {
