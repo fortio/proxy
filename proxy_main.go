@@ -28,10 +28,6 @@ import (
 	"fortio.org/proxy/config"
 )
 
-var (
-	configs = dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
-)
-
 func GetRoutes() []config.Route {
 	routes := configs.Get().(*[]config.Route)
 	return *routes
@@ -57,6 +53,7 @@ func Director(req *http.Request) {
 }
 
 var (
+	configs        = dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
 	email          = flag.String("email", "", "`Email` to attach to cert requests.")
 	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
 	certsFor       = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
@@ -67,6 +64,7 @@ var (
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	h2Target = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
+	acert    *autocert.Manager
 )
 
 func hostPolicy(ctx context.Context, host string) error {
@@ -76,6 +74,21 @@ func hostPolicy(ctx context.Context, host string) error {
 		return nil
 	}
 	return fmt.Errorf("acme/autocert: %q not in allowed list", host)
+}
+
+func printRoutes() {
+	if !log.Log(log.Info) {
+		return
+	}
+	log.Printf("Initial Routes:")
+	for _, r := range GetRoutes() {
+		log.Printf("host %q\t prefix %q\t -> %s", r.Host, r.Prefix, r.Destination.URL.String())
+	}
+}
+
+func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
+	log.LogVf("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
+	return acert.GetCertificate(hello)
 }
 
 func main() {
@@ -94,13 +107,9 @@ func main() {
 	if *redirect != "disabled" {
 		fhttp.RedirectToHTTPS(*redirect)
 	}
-	log.Infof("Initial Routes:")
-	for _, r := range GetRoutes() {
-		log.Infof("host %q\t prefix %q\t -> %s", r.Host, r.Prefix, r.Destination.URL.String())
-	}
-	rp := httputil.ReverseProxy{
-		Director: Director,
-	}
+	printRoutes()
+	rp := httputil.ReverseProxy{Director: Director}
+
 	// TODO: make h2c vs regular client more dynamic based on route config instead of all or nothing
 	// (or maybe some day it will just ge the default behavior of the base http client)
 	if *h2Target {
@@ -123,21 +132,21 @@ func main() {
 	if *httpPort != "disabled" {
 		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, &rp)
 	}
-	acert := &autocert.Manager{
+	if *port == "disabled" {
+		log.Infof("No TLS server port.")
+		select {}
+	}
+	startTLSProxy(s)
+}
+
+func startTLSProxy(s *http.Server) {
+	s.Addr = *port
+	acert = &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: hostPolicy,
 		Cache:      autocert.DirCache(*certsDirectory),
 		Email:      *email,
 	}
-	debugGetCert := func(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
-		log.LogVf("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
-		return acert.GetCertificate(hello)
-	}
-	if *port == "disabled" {
-		log.Infof("No TLS server port.")
-		select {}
-	}
-	s.Addr = *port
 	tlsCfg := acert.TLSConfig()
 	tlsCfg.GetCertificate = debugGetCert
 	tlsCfg.MinVersion = tls.VersionTLS12
