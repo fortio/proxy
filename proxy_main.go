@@ -17,8 +17,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/fortio/net/http2"
 	"golang.org/x/crypto/acme/autocert"
+	"golang.org/x/net/http2"
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
