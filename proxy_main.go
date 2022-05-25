@@ -91,10 +91,22 @@ func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 	return acert.GetCertificate(hello)
 }
 
+func usage(msg string) {
+	_, _ = fmt.Fprintf(os.Stderr, "Fortio proxy %s usage:\n\t%s [flags]\nflags (some flags inherited from fortio but not used):\n",
+		version.Short(),
+		os.Args[0])
+	flag.PrintDefaults()
+	fmt.Fprintln(os.Stderr, msg)
+	os.Exit(1)
+}
+
 func main() {
 	flag.Parse()
 	_, longV, fullV := version.FromBuildInfo()
-	log.Infof("Fortio Proxy %s starting", longV)
+	if len(flag.Args()) != 0 {
+		usage("Only flags are expected")
+	}
+	log.Printf("Fortio Proxy %s starting", longV)
 	if *fullVersion {
 		fmt.Print(fullV)
 		os.Exit(0)
@@ -107,6 +119,7 @@ func main() {
 	if *redirect != "disabled" {
 		fhttp.RedirectToHTTPS(*redirect)
 	}
+
 	printRoutes()
 	rp := httputil.ReverseProxy{Director: Director}
 
