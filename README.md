@@ -2,7 +2,7 @@
 
 Fortio simple TLS/ingress autocert proxy
 
-Front end for running fortio report for instance standalone with TLS / Autocert
+Front end for running fortio report for instance standalone with TLS / Autocert and routing rules to multiplex multiple service behind a common TLS ingress (works with and allows multiplexing of grpc and h2c servers too)
 
 # Install
 
