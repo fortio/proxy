@@ -88,4 +88,4 @@ brews:
     # So you can `brew test` your formula.
     # Default is empty.
     test: |
-      assert_match version.to_s, shell_output("#{bin}/dnsping version")
+      assert_match version.to_s, shell_output("#{bin}/proxy -version")
