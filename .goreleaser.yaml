@@ -5,6 +5,9 @@ builds:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
 archives:
   - replacements:
       darwin: Mac
@@ -25,5 +28,7 @@ gomod:
   proxy: true
   mod: mod
 dockers:
-  - image_templates:
-    - fortio/proxy
+  - image_templates: ["fortio/proxy:{{ .Version }}"]
+    use: buildx
+    build_flag_templates:
+    - --platforms=linux/arm64,linux/amd64
