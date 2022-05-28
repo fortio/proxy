@@ -20,6 +20,8 @@ jobs:
           fetch-depth: 0
       - name: Set up Go
         uses: actions/setup-go@v3
+        with:
+          go-version: '18'
       - name: "GoReleaser Action"
         uses: goreleaser/goreleaser-action@v3.0.0
         with:
