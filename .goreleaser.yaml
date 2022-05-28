@@ -47,3 +47,6 @@ docker_manifests:
   image_templates:
   - fortio/proxy:{{ .Version }}-amd64
   - fortio/proxy:{{ .Version }}-arm64
+release:
+  prerelease: auto
+  mode: append
