@@ -15,7 +15,7 @@ sudo setcap CAP_NET_BIND_SERVICE=+eip $(which proxy)
 
 You can also download one of the many binary [releases](https://github.com/fortio/proxy/releases)
 
-We publish a multi architecture docker image (linux/amd64, linux/arm64) `fortio/proxy`
+We publish a multi architecture docker image (linux/amd64, linux/arm64) `docker run fortio/proxy`
 
 # Usage
 

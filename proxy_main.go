@@ -96,11 +96,14 @@ func usage(msg string) {
 		version.Short(),
 		os.Args[0])
 	flag.PrintDefaults()
-	fmt.Fprintln(os.Stderr, msg)
+	if msg != "" {
+		fmt.Fprintln(os.Stderr, msg)
+	}
 	os.Exit(1)
 }
 
 func main() {
+	flag.CommandLine.Usage = func() { usage("") }
 	flag.Parse()
 	_, longV, fullV := version.FromBuildInfo()
 	if len(flag.Args()) != 0 {

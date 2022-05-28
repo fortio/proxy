@@ -1,3 +1,4 @@
 FROM scratch
-ENTRYPOINT ["/proxy"]
-COPY proxy /
+COPY proxy /usr/bin/proxy
+ENTRYPOINT ["/usr/bin/proxy"]
+CMD ["-h"]
