@@ -106,7 +106,6 @@ func main() {
 	if len(flag.Args()) != 0 {
 		usage("Only flags are expected")
 	}
-	log.Printf("Fortio Proxy %s starting", longV)
 	if *fullVersion {
 		fmt.Print(fullV)
 		os.Exit(0)
@@ -116,6 +115,7 @@ func main() {
 			log.Critf("Unable to watch config/flag changes in %v: %v", *configDir, err)
 		}
 	}
+	log.Printf("Fortio Proxy %s starting", longV)
 	if *redirect != "disabled" {
 		fhttp.RedirectToHTTPS(*redirect)
 	}
