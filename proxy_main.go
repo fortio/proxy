@@ -15,6 +15,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"golang.org/x/crypto/acme/autocert"
@@ -54,9 +55,9 @@ func Director(req *http.Request) {
 
 var (
 	configs        = dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
-	email          = flag.String("email", "", "`Email` to attach to cert requests.")
-	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
+	email          = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
 	certsFor       = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
+	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
 	certsDirectory = flag.String("certs-directory", ".", "Directory `path` where to store the certs")
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
@@ -80,7 +81,7 @@ func printRoutes() {
 	if !log.Log(log.Info) {
 		return
 	}
-	log.Printf("Initial Routes:")
+	log.Printf("Initial Routes (routes.json dynamic flag):")
 	for _, r := range GetRoutes() {
 		log.Printf("host %q\t prefix %q\t -> %s", r.Host, r.Prefix, r.Destination.URL.String())
 	}
@@ -157,11 +158,12 @@ func main() {
 
 func startTLSProxy(s *http.Server) {
 	s.Addr = *port
+	emailStr := strings.TrimSpace(email.Get())
 	acert = &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: hostPolicy,
 		Cache:      autocert.DirCache(*certsDirectory),
-		Email:      *email,
+		Email:      emailStr,
 	}
 	tlsCfg := acert.TLSConfig()
 	tlsCfg.GetCertificate = debugGetCert
@@ -174,7 +176,7 @@ func startTLSProxy(s *http.Server) {
 		currentDomains[i] = k
 		i++
 	}
-	log.Infof("Starting TLS on %s for %v", *port, currentDomains)
+	log.Infof("Starting TLS on %s for %v (%s) - certs directory %s", *port, currentDomains, acert.Email, *certsDirectory)
 	err := s.ListenAndServeTLS("", "")
 	if err != nil {
 		log.Fatalf("ListendAndServeTLS(): %v", err)

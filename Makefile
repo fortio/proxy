@@ -5,6 +5,11 @@ test:
 	go run -race . -h2 -config sampleConfig/ -redirect-port :8081 -https-port :8443 -http-port :8001
 
 
+docker-test:
+	GOOS=linux go build
+	docker build . --tag fortio/proxy:test
+	docker run -v `pwd`/sampleConfig:/etc/fortio-proxy-config fortio/proxy:test
+
 dev-prefix:
 	go run -race . -h2 -http-port 8001 -https-port disabled -redirect-port disabled\
 		-loglevel debug \
