@@ -28,27 +28,27 @@ gomod:
   proxy: true
   mod: mod
 dockers:
-  - image_templates: ["fortio/proxy:{{ .Version }}-amd64"]
+  - image_templates: ["fortio/{{ .ProjectName }}:{{ .Version }}-amd64"]
     use: buildx
     goarch: amd64
     build_flag_templates:
     - --platform=linux/amd64
-  - image_templates: ["fortio/proxy:{{ .Version }}-arm64"]
+  - image_templates: ["fortio/{{ .ProjectName }}:{{ .Version }}-arm64"]
     use: buildx
     goarch: arm64
     build_flag_templates:
     - --platform=linux/arm64
 docker_manifests:
 -
-  name_template: fortio/proxy:{{ .Version }}
+  name_template: fortio/{{ .ProjectName }}:{{ .Version }}
   image_templates:
-  - fortio/proxy:{{ .Version }}-amd64
-  - fortio/proxy:{{ .Version }}-arm64
+  - fortio/{{ .ProjectName }}:{{ .Version }}-amd64
+  - fortio/{{ .ProjectName }}:{{ .Version }}-arm64
 -
-  name_template: fortio/proxy:latest
+  name_template: fortio/{{ .ProjectName }}:latest
   image_templates:
-  - fortio/proxy:{{ .Version }}-amd64
-  - fortio/proxy:{{ .Version }}-arm64
+  - fortio/{{ .ProjectName }}:{{ .Version }}-amd64
+  - fortio/{{ .ProjectName }}:{{ .Version }}-arm64
 release:
   prerelease: auto
   mode: append
