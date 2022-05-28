@@ -42,3 +42,8 @@ docker_manifests:
   image_templates:
   - fortio/proxy:{{ .Version }}-amd64
   - fortio/proxy:{{ .Version }}-arm64
+-
+  name_template: fortio/proxy:latest
+  image_templates:
+  - fortio/proxy:{{ .Version }}-amd64
+  - fortio/proxy:{{ .Version }}-arm64

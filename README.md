@@ -17,6 +17,8 @@ You can also download one of the many binary [releases](https://github.com/forti
 
 We publish a multi architecture docker image (linux/amd64, linux/arm64) `fortio/proxy`
 
+# Usage
+
 See example of setup in https://github.com/fortio/demo-deployment
 
 You can define routing rules using host or prefix matching, for instance:
