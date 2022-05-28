@@ -1,9 +1,3 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
-before:
-  hooks:
-    # You may remove this if you don't use go modules.
-    - go mod tidy
 builds:
   - env:
       - CGO_ENABLED=0
@@ -18,15 +12,18 @@ archives:
       windows: Windows
       amd64: x86_64
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
 gomod:
   proxy: true
   mod: mod
+dockers:
+  - image_templates:
+    - fortio/proxy
