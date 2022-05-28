@@ -28,7 +28,17 @@ gomod:
   proxy: true
   mod: mod
 dockers:
-  - image_templates: ["fortio/proxy:{{ .Version }}"]
+  - image_templates: ["fortio/proxy:{{ .Version }}-amd64"]
     use: buildx
     build_flag_templates:
-    - --platforms=linux/arm64,linux/amd64
+    - --platforms=linux/amd64
+  - image_templates: ["fortio/proxy:{{ .Version }}-arm64"]
+    use: buildx
+    build_flag_templates:
+    - --platforms=linux/arm64
+docker_manifests:
+-
+  name_template: fortio/proxy:{{ .Version }}
+  image_templates:
+  - fortio/proxy:{{ .Version }}-amd64
+  - fortio/proxy:{{ .Version }}-arm64
