@@ -84,7 +84,6 @@ func main() {
 		fhttp.RedirectToHTTPS(*redirect)
 	}
 
-	rp.PrintRoutes()
 	revp := rp.ReverseProxy()
 
 	s := &http.Server{

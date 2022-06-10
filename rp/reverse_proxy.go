@@ -59,6 +59,8 @@ func PrintRoutes() {
 
 // ReverseProxy returns a new reverse proxy which will route based on the config/dflags.
 func ReverseProxy() *httputil.ReverseProxy {
+	PrintRoutes()
+
 	revp := httputil.ReverseProxy{Director: Director}
 
 	// TODO: make h2c vs regular client more dynamic based on route config instead of all or nothing
