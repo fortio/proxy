@@ -10,51 +10,22 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"net"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
 	"os"
 	"strings"
 	"time"
 
 	"golang.org/x/crypto/acme/autocert"
-	"golang.org/x/net/http2"
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
 	"fortio.org/fortio/fhttp"
 	"fortio.org/fortio/log"
 	"fortio.org/fortio/version"
-	"fortio.org/proxy/config"
+	"fortio.org/proxy/rp"
 )
 
-func GetRoutes() []config.Route {
-	routes := configs.Get().(*[]config.Route)
-	return *routes
-}
-
-func setDestination(req *http.Request, url *url.URL) {
-	req.URL.Scheme = url.Scheme
-	req.URL.Host = url.Host
-}
-
-func Director(req *http.Request) {
-	routes := GetRoutes()
-	log.LogVf("Directing %+v", req)
-	for _, route := range routes {
-		log.LogVf("Evaluating req %q vs route %q and path %q vs prefix %q for dest %s",
-			req.Host, route.Host, req.URL.Path, route.Prefix, route.Destination.URL.String())
-		if route.MatchServerReq(req) {
-			fhttp.LogRequest(req, route.Destination.Str)
-			setDestination(req, &route.Destination.URL)
-			return
-		}
-	}
-}
-
 var (
-	configs        = dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
 	email          = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
 	certsFor       = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
 	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
@@ -64,7 +35,6 @@ var (
 	configDir      = flag.String("config", "",
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
-	h2Target = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
 	acert    *autocert.Manager
 )
 
@@ -75,16 +45,6 @@ func hostPolicy(ctx context.Context, host string) error {
 		return nil
 	}
 	return fmt.Errorf("acme/autocert: %q not in allowed list", host)
-}
-
-func printRoutes() {
-	if !log.Log(log.Info) {
-		return
-	}
-	log.Printf("Initial Routes (routes.json dynamic flag):")
-	for _, r := range GetRoutes() {
-		log.Printf("host %q\t prefix %q\t -> %s", r.Host, r.Prefix, r.Destination.URL.String())
-	}
 }
 
 func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
@@ -124,19 +84,9 @@ func main() {
 		fhttp.RedirectToHTTPS(*redirect)
 	}
 
-	printRoutes()
-	rp := httputil.ReverseProxy{Director: Director}
+	rp.PrintRoutes()
+	revp := rp.ReverseProxy()
 
-	// TODO: make h2c vs regular client more dynamic based on route config instead of all or nothing
-	// (or maybe some day it will just ge the default behavior of the base http client)
-	if *h2Target {
-		rp.Transport = &http2.Transport{
-			AllowHTTP: true,
-			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
-				return net.Dial(network, addr)
-			},
-		}
-	}
 	s := &http.Server{
 		// TODO: make these timeouts configurable
 		ReadTimeout:       6 * time.Second,
@@ -144,11 +94,13 @@ func main() {
 		IdleTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 3 * time.Second,
 		// The reverse proxy
-		Handler: &rp,
+		Handler: revp,
 	}
+
 	if *httpPort != "disabled" {
-		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, &rp)
+		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, revp)
 	}
+
 	if *port == "disabled" {
 		log.Infof("No TLS server port.")
 		select {}
