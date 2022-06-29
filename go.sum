@@ -1,5 +1,5 @@
-fortio.org/fortio v1.33.0 h1:AM1jMpD7u3wdM5wMeNcwCH7K02yN0Sd+tgZAFU/X7p0=
-fortio.org/fortio v1.33.0/go.mod h1:Iu5rH/OugXJObd4p1cLLhNcvyjosx3fgGi/FdUesY4c=
+fortio.org/fortio v1.34.0 h1:8O5ehxDuFB4KUBoooVu8L3qThnIvhyoeqJq/m0qHKX0=
+fortio.org/fortio v1.34.0/go.mod h1:Iu5rH/OugXJObd4p1cLLhNcvyjosx3fgGi/FdUesY4c=
 github.com/fsnotify/fsnotify v1.5.4 h1:jRbGcIw6P2Meqdwuo0H1p6JVLbL5DHKAKlYndzMwVZI=
 github.com/fsnotify/fsnotify v1.5.4/go.mod h1:OVB6XrOHzAwXMpEM7uPOzcehqUV2UqJxmVXmkdnm1bU=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
