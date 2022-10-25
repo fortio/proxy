@@ -1,6 +1,6 @@
 fortio.org/assert v1.1.0 h1:AEkX3WzLx4Qsvgg+HyZTp9wHKo0lr1ZcAylZ2YJgGYc=
-fortio.org/fortio v1.38.1 h1:WZZPHKQUCwfYFSHdWrUNsSIVyEwT4NFiCCyAETP6mGY=
-fortio.org/fortio v1.38.1/go.mod h1:Avx6KAhkj2sBCOhUrQkgmtfkGKbQSlEN7/6JEuQcvMU=
+fortio.org/fortio v1.38.2 h1:K1FYdEom5aElNMg1ZnX0zy7laIUzNScyViccbJcnkdM=
+fortio.org/fortio v1.38.2/go.mod h1:Avx6KAhkj2sBCOhUrQkgmtfkGKbQSlEN7/6JEuQcvMU=
 github.com/fsnotify/fsnotify v1.6.0 h1:n+5WquG0fcWoWp6xPWfHdbskMCQaFnG6PfBrh1Ky4HY=
 github.com/fsnotify/fsnotify v1.6.0/go.mod h1:sl3t1tCWJFWoRz9R8WJCbQihKKwmorjAbSClcnxKAGw=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=

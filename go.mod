@@ -3,7 +3,7 @@ module fortio.org/proxy
 go 1.18
 
 require (
-	fortio.org/fortio v1.38.1
+	fortio.org/fortio v1.38.2
 	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a
 	golang.org/x/net v0.0.0-20221012135044-0b7e1fb9d458
 )
