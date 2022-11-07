@@ -29,6 +29,12 @@ func GetRoutes() []config.Route {
 func setDestination(req *http.Request, url *url.URL) {
 	req.URL.Scheme = url.Scheme
 	req.URL.Host = url.Host
+	// Horrible hack to workaround golang behavior with User-Agent: addition
+	// same "fix" as https://github.com/golang/go/commit/6a6c1d9841a1957a2fd292df776ea920ae38ea00
+	if _, ok := req.Header["User-Agent"]; !ok {
+		// explicitly disable User-Agent so it's not set to default value
+		req.Header.Set("User-Agent", "")
+	}
 }
 
 // Director is the object used by the ReverseProxy to pick the route/destination.
