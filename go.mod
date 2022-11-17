@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	fortio.org/fortio v1.38.4
-	golang.org/x/crypto v0.2.0
+	golang.org/x/crypto v0.3.0
 	golang.org/x/net v0.2.0
 )
 
