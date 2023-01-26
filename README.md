@@ -45,3 +45,5 @@ You can define routing rules using host or prefix matching, for instance:
 ```
 
 And which domains/common names you will accept and request certificates for (coma separated list in `-certs-domains` flag or dynamic config directory)
+
+Optionally you can also configure `debug-host` for a Host (header, Authority in h2) that will serve's fortio's debug handler for these requests.
