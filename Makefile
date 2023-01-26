@@ -24,9 +24,11 @@ dev-grpc:
 
 dev-h2c:
 	go run -race . -h2 -http-port 8001 -https-port disabled -redirect-port disabled\
+		-debug-host "debug.fortio.org" \
 		 -routes.json '[{"host":"*", "destination":"http://localhost:8080/"}]'
 
 dev:
 	# Run: curl -H "Host: debug.fortio.org" http://localhost:8001/debug
-	go run -race . -http-port 8001 -https-port disabled -redirect-port disabled\
+	# and curl -H "Host: debug.fortio.org" http://localhost:8000/foo
+	go run -race . -http-port 8001 -https-port disabled -redirect-port 8000 \
 		-debug-host "debug.fortio.org" -routes.json '[{"host":"*", "destination":"http://localhost:8080/"}]'

@@ -10,6 +10,7 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -65,13 +66,13 @@ func usage(msg string) {
 	os.Exit(1)
 }
 
-func DebugOnHostFunc(normalHandler http.Handler) http.HandlerFunc {
+func DebugOnHostFunc(normalHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		debugHost := debugHost.Get()
 		if debugHost != "" && r.Host == debugHost {
 			fhttp.DebugHandler(w, r)
 		} else {
-			normalHandler.ServeHTTP(w, r)
+			normalHandler(w, r)
 		}
 	}
 }
@@ -93,21 +94,33 @@ func main() {
 		}
 	}
 	log.Printf("Fortio Proxy %s starting", longV)
-	if *redirect != "disabled" {
-		fhttp.RedirectToHTTPS(*redirect)
-	}
-
-	var hdlr http.Handler
-	hdlr = rp.ReverseProxy()
-	// Only turn on debug host if configured at launch,
+	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
 	debugHost := debugHost.Get()
+	if *redirect != "disabled" {
+		var a net.Addr
+		if debugHost != "" {
+			// Special case for debug host, redirect to https but also serve debug on that host
+			var m *http.ServeMux
+			m, a = fhttp.HTTPServer("https redirector + debug", *redirect)
+			m.HandleFunc("/", DebugOnHostFunc(fhttp.RedirectToHTTPSHandler))
+		} else {
+			// Standard redirector without special debug host case
+			a = fhttp.RedirectToHTTPS(*redirect)
+		}
+		if a == nil {
+			os.Exit(1) //Error already logged
+		}
+	}
+	// Main reverse proxy handler (with debug if configured)
+	var hdlr http.Handler
+	hdlr = rp.ReverseProxy()
 	if debugHost != "" {
 		log.Warnf("Running Debug echo handler for any request matching Host %q", debugHost)
 		// seems there should be a way to do this without the extra mux?
 		mux := http.NewServeMux()
-		mux.HandleFunc("/", DebugOnHostFunc(hdlr))
-		hdlr = mux
+		mux.HandleFunc("/", DebugOnHostFunc(hdlr.ServeHTTP))
+		hdlr = mux // that's the reverse proxy + debug handler
 	}
 
 	s := &http.Server{
