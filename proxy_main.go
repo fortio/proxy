@@ -66,7 +66,7 @@ func usage(msg string) {
 	os.Exit(1)
 }
 
-func DebugOnHostFunc(normalHandler http.HandlerFunc) http.HandlerFunc {
+func DebugOnHostHandler(normalHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		debugHost := debugHost.Get()
 		if debugHost != "" && r.Host == debugHost {
@@ -101,7 +101,7 @@ func main() {
 		var a net.Addr
 		if debugHost != "" {
 			// Special case for debug host, redirect to https but also serve debug on that host
-			a = fhttp.HTTPServerWithHandler("https redirector + debug", *redirect, DebugOnHostFunc(fhttp.RedirectToHTTPSHandler))
+			a = fhttp.HTTPServerWithHandler("https redirector + debug", *redirect, DebugOnHostHandler(fhttp.RedirectToHTTPSHandler))
 		} else {
 			// Standard redirector without special debug host case
 			a = fhttp.RedirectToHTTPS(*redirect)
@@ -115,7 +115,7 @@ func main() {
 	hdlr = rp.ReverseProxy()
 	if debugHost != "" {
 		log.Warnf("Running Debug echo handler for any request matching Host %q", debugHost)
-		hdlr = http.HandlerFunc(DebugOnHostFunc(hdlr.ServeHTTP)) // that's the reverse proxy + debug handler
+		hdlr = DebugOnHostHandler(hdlr.ServeHTTP) // that's the reverse proxy + debug handler
 	}
 
 	s := &http.Server{
