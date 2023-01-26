@@ -119,7 +119,7 @@ func main() {
 		log.Warnf("Running Debug echo handler for any request matching Host %q", debugHost)
 		// seems there should be a way to do this without the extra mux?
 		mux := http.NewServeMux()
-		mux.HandleFunc("/", DebugOnHostFuncH(hdlr.ServeHTTP))
+		mux.HandleFunc("/", DebugOnHostFunc(hdlr.ServeHTTP))
 		hdlr = mux // that's the reverse proxy + debug handler
 	}
 
