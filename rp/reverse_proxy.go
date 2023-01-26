@@ -1,23 +1,30 @@
 package rp
 
 import (
+	"bytes"
 	"crypto/tls"
 	"flag"
+	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"sort"
+	"time"
 
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/fhttp"
 	"fortio.org/fortio/log"
+	"fortio.org/fortio/version"
 	"fortio.org/proxy/config"
 	"golang.org/x/net/http2"
 )
 
 var (
-	configs  = dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
-	h2Target = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
+	configs   = dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
+	h2Target  = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
+	startTime = time.Now()
 )
 
 // GetRoutes gets the current routes from the dynamic flag routes.json as object (deserialized).
@@ -80,4 +87,63 @@ func ReverseProxy() *httputil.ReverseProxy {
 		}
 	}
 	return &revp
+}
+
+// DebugHandler is similar to Fortio's DebugHandler,
+// it returns debug/useful info to http client.
+// but doesn't have some of the extra sensitive info like env dump
+// and host name or echo delay or header setting options.
+func SafeDebugHandler(w http.ResponseWriter, r *http.Request) {
+	fhttp.LogRequest(r, "Debug")
+	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+	var buf bytes.Buffer
+	buf.WriteString("Φορτίο version ")
+	buf.WriteString(version.Long())
+	buf.WriteString(" echo debug server up for ")
+	buf.WriteString(fmt.Sprint(fhttp.RoundDuration(time.Since(startTime))))
+	buf.WriteString(" - request from ")
+	buf.WriteString(r.RemoteAddr)
+	buf.WriteString(fhttp.TLSInfo(r))
+	buf.WriteString("\n\n")
+	buf.WriteString(r.Method)
+	buf.WriteByte(' ')
+	buf.WriteString(r.URL.String())
+	buf.WriteByte(' ')
+	buf.WriteString(r.Proto)
+	buf.WriteString("\n\nheaders:\n\n")
+	// Host is removed from headers map and put here (!)
+	buf.WriteString("Host: ")
+	buf.WriteString(r.Host)
+
+	keys := make([]string, 0, len(r.Header))
+	for k := range r.Header {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, name := range keys {
+		buf.WriteByte('\n')
+		buf.WriteString(name)
+		buf.WriteString(": ")
+		first := true
+		headers := r.Header[name]
+		for _, h := range headers {
+			if !first {
+				buf.WriteByte(',')
+			}
+			buf.WriteString(h)
+			first = false
+		}
+	}
+	data, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Errf("Error reading %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	buf.WriteString("\n\nbody:\n\n")
+	buf.WriteString(fhttp.DebugSummary(data, 512))
+	buf.WriteByte('\n')
+	if _, err = w.Write(buf.Bytes()); err != nil {
+		log.Errf("Error writing response %v to %v", err, r.RemoteAddr)
+	}
 }

@@ -70,7 +70,7 @@ func DebugOnHostFunc(normalHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		debugHost := debugHost.Get()
 		if debugHost != "" && r.Host == debugHost {
-			fhttp.DebugHandler(w, r)
+			rp.SafeDebugHandler(w, r)
 		} else {
 			normalHandler(w, r)
 		}
