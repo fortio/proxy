@@ -36,6 +36,8 @@ var (
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	acert    *autocert.Manager
+	// optional fortio debug virtual host.
+	debugHost = dflag.DynString(flag.CommandLine, "debug-host", "", "`hostname` to serve echo debug info on if non-empty (ex: debug.fortio.org)")
 )
 
 func hostPolicy(ctx context.Context, host string) error {
@@ -63,6 +65,17 @@ func usage(msg string) {
 	os.Exit(1)
 }
 
+func DebugOnHostFunc(normalHandler http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		debugHost := debugHost.Get()
+		if debugHost != "" && r.Host == debugHost {
+			fhttp.DebugHandler(w, r)
+		} else {
+			normalHandler.ServeHTTP(w, r)
+		}
+	}
+}
+
 func main() {
 	flag.CommandLine.Usage = func() { usage("") }
 	flag.Parse()
@@ -84,7 +97,18 @@ func main() {
 		fhttp.RedirectToHTTPS(*redirect)
 	}
 
-	revp := rp.ReverseProxy()
+	var hdlr http.Handler
+	hdlr = rp.ReverseProxy()
+	// Only turn on debug host if configured at launch,
+	// can be turned off or changed later through dynamic flags but not turned on if starting off
+	debugHost := debugHost.Get()
+	if debugHost != "" {
+		log.Warnf("Running Debug echo handler for any request matching Host %q", debugHost)
+		// seems there should be a way to do this without the extra mux?
+		mux := http.NewServeMux()
+		mux.HandleFunc("/", DebugOnHostFunc(hdlr))
+		hdlr = mux
+	}
 
 	s := &http.Server{
 		// TODO: make these timeouts configurable
@@ -92,12 +116,12 @@ func main() {
 		WriteTimeout:      6 * time.Second,
 		IdleTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 3 * time.Second,
-		// The reverse proxy
-		Handler: revp,
+		// The reverse proxy (+debug if configured)
+		Handler: hdlr,
 	}
 
 	if *httpPort != "disabled" {
-		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, revp)
+		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, hdlr)
 	}
 
 	if *port == "disabled" {
