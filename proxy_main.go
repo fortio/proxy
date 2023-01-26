@@ -66,18 +66,7 @@ func usage(msg string) {
 	os.Exit(1)
 }
 
-func DebugOnHostFunc(normalHandler http.Handler) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		debugHost := debugHost.Get()
-		if debugHost != "" && r.Host == debugHost {
-			fhttp.DebugHandler(w, r)
-		} else {
-			normalHandler.ServeHTTP(w, r)
-		}
-	}
-}
-
-func DebugOnHostFuncH(normalHandler http.HandlerFunc) http.HandlerFunc {
+func DebugOnHostFunc(normalHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		debugHost := debugHost.Get()
 		if debugHost != "" && r.Host == debugHost {
@@ -114,7 +103,7 @@ func main() {
 			// Special case for debug host, redirect to https but also serve debug on that host
 			var m *http.ServeMux
 			m, a = fhttp.HTTPServer("https redirector + debug", *redirect)
-			m.HandleFunc("/", DebugOnHostFuncH(fhttp.RedirectToHTTPSHandler))
+			m.HandleFunc("/", DebugOnHostFunc(fhttp.RedirectToHTTPSHandler))
 		} else {
 			// Standard redirector without special debug host case
 			a = fhttp.RedirectToHTTPS(*redirect)
@@ -130,7 +119,7 @@ func main() {
 		log.Warnf("Running Debug echo handler for any request matching Host %q", debugHost)
 		// seems there should be a way to do this without the extra mux?
 		mux := http.NewServeMux()
-		mux.HandleFunc("/", DebugOnHostFunc(hdlr))
+		mux.HandleFunc("/", DebugOnHostFuncH(hdlr.ServeHTTP))
 		hdlr = mux // that's the reverse proxy + debug handler
 	}
 
