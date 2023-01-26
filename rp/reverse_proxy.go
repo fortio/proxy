@@ -89,6 +89,9 @@ func ReverseProxy() *httputil.ReverseProxy {
 	return &revp
 }
 
+// GzipDebugHandler is a handler wrapping SafeDebugHandler with optional gzip compression.
+var GzipDebugHandler = fhttp.Gzip(http.HandlerFunc(SafeDebugHandler))
+
 // DebugHandler is similar to Fortio's DebugHandler,
 // it returns debug/useful info to http client.
 // but doesn't have some of the extra sensitive info like env dump
