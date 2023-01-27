@@ -24,6 +24,7 @@ import (
 var (
 	configs   = dflag.DynJSON(flag.CommandLine, "routes.json", &[]config.Route{}, "json list of `routes`")
 	h2Target  = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
+	HostID    = dflag.DynString(flag.CommandLine, "hostid", "", "host id to show in debug-host output")
 	startTime = time.Now()
 )
 
@@ -102,9 +103,15 @@ func SafeDebugHandler(w http.ResponseWriter, r *http.Request) {
 	var buf bytes.Buffer
 	buf.WriteString("Φορτίο version ")
 	buf.WriteString(version.Long())
-	buf.WriteString(" echo debug server up for ")
+	buf.WriteString("\nDebug server")
+	id := HostID.Get()
+	if id != "" {
+		buf.WriteString(" on ")
+		buf.WriteString(id)
+	}
+	buf.WriteString(" up for ")
 	buf.WriteString(fmt.Sprint(fhttp.RoundDuration(time.Since(startTime))))
-	buf.WriteString(" - request from ")
+	buf.WriteString("\nRequest from ")
 	buf.WriteString(r.RemoteAddr)
 	buf.WriteString(fhttp.TLSInfo(r))
 	buf.WriteString("\n\n")
