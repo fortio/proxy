@@ -30,5 +30,5 @@ dev-h2c:
 dev:
 	# Run: curl -H "Host: debug.fortio.org" http://localhost:8001/debug
 	# and curl -H "Host: debug.fortio.org" http://localhost:8000/foo
-	go run -race . -http-port 8001 -https-port disabled -redirect-port 8000 \
+	go run -race . -http-port 8001 -https-port disabled -redirect-port 8000 -hostid "$(shell hostname)-test" \
 		-debug-host "debug.fortio.org" -routes.json '[{"host":"*", "destination":"http://localhost:8080/"}]'

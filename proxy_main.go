@@ -93,7 +93,7 @@ func main() {
 			log.Critf("Unable to watch config/flag changes in %v: %v", *configDir, err)
 		}
 	}
-	log.Printf("Fortio Proxy %s starting", longV)
+	log.Printf("Fortio Proxy %s starting - hostid %q", longV, rp.HostID.Get())
 	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
 	debugHost := debugHost.Get()
