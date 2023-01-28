@@ -50,7 +50,8 @@ func TestMatch(t *testing.T) {
 		}
 		req.Host = req.URL.Host
 		res := route.MatchServerReq(req)
-		log.Infof("%d expecting %v got %v for H %s P %s D %s vs Req scheme %s host %s port %s", i, tst.match, res, route.Host, route.Prefix,
+		log.Infof("%d expecting %v got %v for H %s P %s D %s vs Req scheme %s host %s port %s",
+			i, tst.match, res, route.Host, route.Prefix,
 			route.Destination.URL.String(), req.URL.Scheme, req.URL.Host, req.URL.Port())
 		if res != tst.match {
 			t.Errorf("Mismatch %d expected %v for H %s P %s D %s vs Req scheme %s host %s port %s", i, tst.match, route.Host, route.Prefix,

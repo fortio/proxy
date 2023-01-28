@@ -16,19 +16,19 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/crypto/acme/autocert"
-
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
 	"fortio.org/fortio/fhttp"
 	"fortio.org/fortio/log"
 	"fortio.org/fortio/version"
 	"fortio.org/proxy/rp"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 var (
-	email          = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
-	certsFor       = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
+	email    = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
+	certsFor = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{},
+		"Coma separated list of `domains` to get certs for")
 	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
 	certsDirectory = flag.String("certs-directory", ".", "Directory `path` where to store the certs")
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
@@ -37,8 +37,6 @@ var (
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	acert    *autocert.Manager
-	// optional fortio debug virtual host.
-	debugHost = dflag.DynString(flag.CommandLine, "debug-host", "", "`hostname` to serve echo debug info on if non-empty (ex: debug.fortio.org)")
 )
 
 func hostPolicy(ctx context.Context, host string) error {
@@ -66,17 +64,6 @@ func usage(msg string) {
 	os.Exit(1)
 }
 
-func DebugOnHostHandler(normalHandler http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		debugHost := debugHost.Get()
-		if debugHost != "" && r.Host == debugHost {
-			rp.GzipDebugHandler.ServeHTTP(w, r)
-		} else {
-			normalHandler(w, r)
-		}
-	}
-}
-
 func main() {
 	flag.CommandLine.Usage = func() { usage("") }
 	flag.Parse()
@@ -96,18 +83,18 @@ func main() {
 	log.Printf("Fortio Proxy %s starting - hostid %q", longV, rp.HostID.Get())
 	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
-	debugHost := debugHost.Get()
-	if *redirect != "disabled" {
+	debugHost := rp.DebugHost.Get()
+	if *redirect != "disabled" { //nolint:goconst
 		var a net.Addr
 		if debugHost != "" {
 			// Special case for debug host, redirect to https but also serve debug on that host
-			a = fhttp.HTTPServerWithHandler("https redirector + debug", *redirect, DebugOnHostHandler(fhttp.RedirectToHTTPSHandler))
+			a = fhttp.HTTPServerWithHandler("https redirector + debug", *redirect, rp.DebugOnHostHandler(fhttp.RedirectToHTTPSHandler))
 		} else {
 			// Standard redirector without special debug host case
 			a = fhttp.RedirectToHTTPS(*redirect)
 		}
 		if a == nil {
-			os.Exit(1) //Error already logged
+			os.Exit(1) // Error already logged
 		}
 	}
 	// Main reverse proxy handler (with debug if configured)
@@ -115,7 +102,7 @@ func main() {
 	hdlr = rp.ReverseProxy()
 	if debugHost != "" {
 		log.Warnf("Running Debug echo handler for any request matching Host %q", debugHost)
-		hdlr = DebugOnHostHandler(hdlr.ServeHTTP) // that's the reverse proxy + debug handler
+		hdlr = rp.DebugOnHostHandler(hdlr.ServeHTTP) // that's the reverse proxy + debug handler
 	}
 
 	s := &http.Server{

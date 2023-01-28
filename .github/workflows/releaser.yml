@@ -23,12 +23,12 @@ jobs:
         with:
           go-version: 'stable'
       - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # pin@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # pin@v2
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: "GoReleaser Action"
-        uses: goreleaser/goreleaser-action@8f67e590f2d095516493f017008adc464e63adb1 # pin@v4.1.0
+        uses: goreleaser/goreleaser-action@9754a253a8673b0ea869c2e863b4e975497efd0c # pin@v4
         with:
           distribution: goreleaser
           version: latest
