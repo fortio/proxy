@@ -16,19 +16,19 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/crypto/acme/autocert"
-
 	"fortio.org/fortio/dflag"
 	"fortio.org/fortio/dflag/configmap"
 	"fortio.org/fortio/fhttp"
 	"fortio.org/fortio/log"
 	"fortio.org/fortio/version"
 	"fortio.org/proxy/rp"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 var (
-	email          = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
-	certsFor       = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{}, "Coma seperated list of `domains` to get certs for")
+	email    = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
+	certsFor = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{},
+		"Coma separated list of `domains` to get certs for")
 	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
 	certsDirectory = flag.String("certs-directory", ".", "Directory `path` where to store the certs")
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
@@ -84,7 +84,7 @@ func main() {
 	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
 	debugHost := rp.DebugHost.Get()
-	if *redirect != "disabled" {
+	if *redirect != "disabled" { //nolint:goconst
 		var a net.Addr
 		if debugHost != "" {
 			// Special case for debug host, redirect to https but also serve debug on that host
@@ -94,7 +94,7 @@ func main() {
 			a = fhttp.RedirectToHTTPS(*redirect)
 		}
 		if a == nil {
-			os.Exit(1) //Error already logged
+			os.Exit(1) // Error already logged
 		}
 	}
 	// Main reverse proxy handler (with debug if configured)

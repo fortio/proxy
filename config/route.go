@@ -15,7 +15,7 @@ type JSONURL struct {
 }
 
 // Route configuration. Does Host/Prefix match to destination, see Match* functions.
-// (only host,port,scheme part of Destination URL are used)
+// (only host,port,scheme part of Destination URL are used).
 type Route struct {
 	// Host or * or empty to match any host (* without a Prefix must be the last rule)
 	Host string
@@ -48,6 +48,7 @@ func (r *Route) MatchServerReq(req *http.Request) bool {
 	// Server requests have host:port in req.Host (and nothing host/port related in req.URL)
 	return r.MatchHostAndPath(req.Host, req.URL.Path)
 }
+
 func (r *Route) MatchHostAndPath(hostPort, path string) bool {
 	host := hostPort
 	idx := strings.LastIndex(hostPort, ":")
