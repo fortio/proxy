@@ -37,8 +37,6 @@ var (
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	acert    *autocert.Manager
-	// optional fortio debug virtual host.
-	debugHost = dflag.DynString(flag.CommandLine, "debug-host", "", "`hostname` to serve echo debug info on if non-empty (ex: debug.fortio.org)")
 )
 
 func hostPolicy(ctx context.Context, host string) error {
@@ -66,17 +64,6 @@ func usage(msg string) {
 	os.Exit(1)
 }
 
-func DebugOnHostHandler(normalHandler http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		debugHost := debugHost.Get()
-		if debugHost != "" && r.Host == debugHost {
-			rp.GzipDebugHandler.ServeHTTP(w, r)
-		} else {
-			normalHandler(w, r)
-		}
-	}
-}
-
 func main() {
 	flag.CommandLine.Usage = func() { usage("") }
 	flag.Parse()
@@ -96,12 +83,12 @@ func main() {
 	log.Printf("Fortio Proxy %s starting - hostid %q", longV, rp.HostID.Get())
 	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
-	debugHost := debugHost.Get()
+	debugHost := rp.DebugHost.Get()
 	if *redirect != "disabled" {
 		var a net.Addr
 		if debugHost != "" {
 			// Special case for debug host, redirect to https but also serve debug on that host
-			a = fhttp.HTTPServerWithHandler("https redirector + debug", *redirect, DebugOnHostHandler(fhttp.RedirectToHTTPSHandler))
+			a = fhttp.HTTPServerWithHandler("https redirector + debug", *redirect, rp.DebugOnHostHandler(fhttp.RedirectToHTTPSHandler))
 		} else {
 			// Standard redirector without special debug host case
 			a = fhttp.RedirectToHTTPS(*redirect)
@@ -115,7 +102,7 @@ func main() {
 	hdlr = rp.ReverseProxy()
 	if debugHost != "" {
 		log.Warnf("Running Debug echo handler for any request matching Host %q", debugHost)
-		hdlr = DebugOnHostHandler(hdlr.ServeHTTP) // that's the reverse proxy + debug handler
+		hdlr = rp.DebugOnHostHandler(hdlr.ServeHTTP) // that's the reverse proxy + debug handler
 	}
 
 	s := &http.Server{

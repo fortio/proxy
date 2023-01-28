@@ -26,6 +26,8 @@ var (
 	h2Target  = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
 	HostID    = dflag.DynString(flag.CommandLine, "hostid", "", "host id to show in debug-host output")
 	startTime = time.Now()
+	// optional fortio debug virtual host.
+	DebugHost = dflag.DynString(flag.CommandLine, "debug-host", "", "`hostname` to serve echo debug info on if non-empty (ex: debug.fortio.org)")
 )
 
 // GetRoutes gets the current routes from the dynamic flag routes.json as object (deserialized).
@@ -155,5 +157,19 @@ func SafeDebugHandler(w http.ResponseWriter, r *http.Request) {
 	buf.WriteByte('\n')
 	if _, err = w.Write(buf.Bytes()); err != nil {
 		log.Errf("Error writing response %v to %v", err, r.RemoteAddr)
+	}
+}
+
+func DebugOnHostHandler(normalHandler http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		debugHost := DebugHost.Get()
+		if debugHost != "" && r.Host == debugHost {
+			path := r.URL.Path
+			if path != "/favicon.ico" {
+				GzipDebugHandler.ServeHTTP(w, r)
+				return
+			}
+		}
+		normalHandler(w, r)
 	}
 }
