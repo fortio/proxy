@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: "GoReleaser Action"
-        uses: goreleaser/goreleaser-action@9754a253a8673b0ea869c2e863b4e975497efd0c # pin@v4
+        uses: goreleaser/goreleaser-action@f82d6c1c344bcacabba2c841718984797f664a6b # pin@v4
         with:
           distribution: goreleaser
           version: latest
