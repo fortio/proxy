@@ -13,10 +13,10 @@ import (
 	"sort"
 	"time"
 
-	"fortio.org/fortio/dflag"
+	"fortio.org/dflag"
 	"fortio.org/fortio/fhttp"
-	"fortio.org/fortio/log"
 	"fortio.org/fortio/version"
+	"fortio.org/log"
 	"fortio.org/proxy/config"
 	"golang.org/x/net/http2"
 )

@@ -16,12 +16,13 @@ import (
 	"strings"
 	"time"
 
-	"fortio.org/fortio/dflag"
-	"fortio.org/fortio/dflag/configmap"
+	"fortio.org/dflag"
+	"fortio.org/dflag/configmap"
+	"fortio.org/dflag/dynloglevel"
 	"fortio.org/fortio/fhttp"
-	"fortio.org/fortio/log"
-	"fortio.org/fortio/version"
+	"fortio.org/log"
 	"fortio.org/proxy/rp"
+	"fortio.org/version"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -37,6 +38,7 @@ var (
 		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
 	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	acert    *autocert.Manager
+	shortV   string
 )
 
 func hostPolicy(ctx context.Context, host string) error {
@@ -55,7 +57,7 @@ func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 
 func usage(msg string) {
 	_, _ = fmt.Fprintf(os.Stderr, "Fortio proxy %s usage:\n\t%s [flags]\nflags (some flags inherited from fortio but not used):\n",
-		version.Short(),
+		shortV,
 		os.Args[0])
 	flag.PrintDefaults()
 	if msg != "" {
@@ -66,8 +68,11 @@ func usage(msg string) {
 
 func main() {
 	flag.CommandLine.Usage = func() { usage("") }
+	var longV string
+	var fullV string
+	shortV, longV, fullV = version.FromBuildInfo()
+	dynloglevel.LoggerFlagSetup()
 	flag.Parse()
-	_, longV, fullV := version.FromBuildInfo()
 	if len(flag.Args()) != 0 {
 		usage("Only flags are expected")
 	}
