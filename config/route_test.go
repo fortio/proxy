@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"fortio.org/fortio/log"
+	"fortio.org/log"
 )
 
 func TestMatch(t *testing.T) {
