@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"fortio.org/fortio/log"
+	"fortio.org/log"
 )
 
 type JSONURL struct {
