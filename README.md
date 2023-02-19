@@ -1,3 +1,6 @@
+[![Go Reference](https://pkg.go.dev/badge/fortio.org/proxy.svg)](https://pkg.go.dev/fortio.org/proxy)
+[![Go Report Card](https://goreportcard.com/badge/fortio.org/proxy)](https://goreportcard.com/report/fortio.org/proxy)
+[![GitHub Release](https://img.shields.io/github/release/fortio/proxy.svg?style=flat)](https://github.com/fortio/proxy/releases/)
 # Fortio proxy
 
 Fortio simple TLS/ingress autocert proxy
@@ -46,4 +49,4 @@ You can define routing rules using host or prefix matching, for instance:
 
 And which domains/common names you will accept and request certificates for (coma separated list in `-certs-domains` flag or dynamic config directory)
 
-Optionally you can also configure `debug-host` for a Host (header, Authority in h2) that will serve's fortio's debug handler for these requests.
+Optionally you can also configure `debug-host` for a Host (header, Authority in h2) that will serve a secured variant of fortio's debug handler for these requests: you can see it on [https://debug.fortio.org/a/random/test](https://debug.fortio.org/a/random/test)
