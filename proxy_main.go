@@ -21,6 +21,7 @@ import (
 	"fortio.org/fortio/fhttp"
 	"fortio.org/log"
 	"fortio.org/proxy/rp"
+	"fortio.org/scli"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -50,8 +51,8 @@ func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 }
 
 func main() {
-	cli.Config.ProgramName = "Fortio proxy"
-	cli.ServerMain()
+	cli.ProgramName = "Fortio proxy"
+	scli.ServerMain()
 	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
 	debugHost := rp.DebugHost.Get()
@@ -86,7 +87,7 @@ func main() {
 		Handler: hdlr,
 	}
 
-	log.Printf("Fortio Proxy %s started - hostid %q", cli.Config.LongVersion, rp.HostID.Get())
+	log.Printf("Fortio Proxy %s started - hostid %q", cli.LongVersion, rp.HostID.Get())
 
 	if *httpPort != "disabled" {
 		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, hdlr)
