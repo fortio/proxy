@@ -16,13 +16,11 @@ import (
 	"strings"
 	"time"
 
+	"fortio.org/cli"
 	"fortio.org/dflag"
-	"fortio.org/dflag/configmap"
-	"fortio.org/dflag/dynloglevel"
 	"fortio.org/fortio/fhttp"
 	"fortio.org/log"
 	"fortio.org/proxy/rp"
-	"fortio.org/version"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -30,15 +28,11 @@ var (
 	email    = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
 	certsFor = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{},
 		"Coma separated list of `domains` to get certs for")
-	fullVersion    = flag.Bool("version", false, "Show full version info and exit.")
 	certsDirectory = flag.String("certs-directory", ".", "Directory `path` where to store the certs")
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
-	configDir      = flag.String("config", "",
-		"Config directory `path` to watch for changes of dynamic flags (empty for no watch)")
-	httpPort = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
-	acert    *autocert.Manager
-	shortV   string
+	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
+	acert          *autocert.Manager
 )
 
 func hostPolicy(ctx context.Context, host string) error {
@@ -55,37 +49,9 @@ func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 	return acert.GetCertificate(hello)
 }
 
-func usage(msg string) {
-	_, _ = fmt.Fprintf(os.Stderr, "Fortio proxy %s usage:\n\t%s [flags]\nflags (some flags inherited from fortio but not used):\n",
-		shortV,
-		os.Args[0])
-	flag.PrintDefaults()
-	if msg != "" {
-		fmt.Fprintln(os.Stderr, msg)
-	}
-	os.Exit(1)
-}
-
 func main() {
-	flag.CommandLine.Usage = func() { usage("") }
-	var longV string
-	var fullV string
-	shortV, longV, fullV = version.FromBuildInfo()
-	dynloglevel.LoggerFlagSetup()
-	flag.Parse()
-	if len(flag.Args()) != 0 {
-		usage("Only flags are expected")
-	}
-	if *fullVersion {
-		fmt.Print(fullV)
-		os.Exit(0)
-	}
-	if *configDir != "" {
-		if _, err := configmap.Setup(flag.CommandLine, *configDir); err != nil {
-			log.Critf("Unable to watch config/flag changes in %v: %v", *configDir, err)
-		}
-	}
-	log.Printf("Fortio Proxy %s starting - hostid %q", longV, rp.HostID.Get())
+	cli.Config.ProgramName = "Fortio proxy"
+	cli.ServerMain()
 	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
 	debugHost := rp.DebugHost.Get()
@@ -119,6 +85,8 @@ func main() {
 		// The reverse proxy (+debug if configured)
 		Handler: hdlr,
 	}
+
+	log.Printf("Fortio Proxy %s started - hostid %q", cli.Config.LongVersion, rp.HostID.Get())
 
 	if *httpPort != "disabled" {
 		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, hdlr)

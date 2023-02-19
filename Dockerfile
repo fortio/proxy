@@ -10,4 +10,4 @@ VOLUME /etc/fortio-proxy-certs
 # logs etc
 WORKDIR /var/log/fortio
 # start the proxy with default; the routes and cert by default
-CMD ["-config", "/etc/fortio-proxy-config", "-certs-directory", "/etc/fortio-proxy-certs"]
+CMD ["-config-dir", "/etc/fortio-proxy-config", "-certs-directory", "/etc/fortio-proxy-certs"]
