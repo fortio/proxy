@@ -56,7 +56,7 @@ func Director(req *http.Request) {
 		log.LogVf("Evaluating req %q vs route %q and path %q vs prefix %q for dest %s",
 			req.Host, route.Host, req.URL.Path, route.Prefix, route.Destination.URL.String())
 		if route.MatchServerReq(req) {
-			fhttp.LogRequest(req, route.Destination.Str)
+			log.LogRequest(req, route.Destination.Str)
 			setDestination(req, &route.Destination.URL)
 			return
 		}
@@ -101,7 +101,7 @@ var GzipDebugHandler = fhttp.Gzip(http.HandlerFunc(SafeDebugHandler))
 // but doesn't have some of the extra sensitive info like env dump
 // and host name or echo delay or header setting options.
 func SafeDebugHandler(w http.ResponseWriter, r *http.Request) {
-	fhttp.LogRequest(r, "Debug")
+	log.LogRequest(r, "Debug")
 	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 	var buf bytes.Buffer
 	buf.WriteString("Φορτίο version ")
@@ -116,7 +116,7 @@ func SafeDebugHandler(w http.ResponseWriter, r *http.Request) {
 	buf.WriteString(fmt.Sprint(fhttp.RoundDuration(time.Since(startTime))))
 	buf.WriteString("\nRequest from ")
 	buf.WriteString(r.RemoteAddr)
-	buf.WriteString(fhttp.TLSInfo(r))
+	buf.WriteString(log.TLSInfo(r))
 	buf.WriteString("\n\n")
 	buf.WriteString(r.Method)
 	buf.WriteByte(' ')
