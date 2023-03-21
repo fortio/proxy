@@ -5,7 +5,7 @@ go 1.18
 require (
 	fortio.org/cli v1.1.0
 	fortio.org/dflag v1.5.2
-	fortio.org/fortio v1.53.1
+	fortio.org/fortio v1.54.0
 	fortio.org/log v1.3.0
 	fortio.org/scli v1.3.1
 	golang.org/x/crypto v0.7.0
