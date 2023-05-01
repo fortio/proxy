@@ -36,7 +36,7 @@ var (
 	acert          *autocert.Manager
 )
 
-func hostPolicy(ctx context.Context, host string) error {
+func hostPolicy(_ context.Context, host string) error {
 	log.LogVf("cert host policy called for %q", host)
 	allowed := certsFor.Get()
 	if _, found := allowed[host]; found {
@@ -95,9 +95,10 @@ func main() {
 
 	if *port == "disabled" {
 		log.Infof("No TLS server port.")
-		select {}
+	} else {
+		go startTLSProxy(s)
 	}
-	startTLSProxy(s)
+	scli.UntilInterrupted()
 }
 
 func startTLSProxy(s *http.Server) {

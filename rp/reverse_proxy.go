@@ -9,7 +9,6 @@ import (
 	"net"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
 	"sort"
 	"time"
 
@@ -37,29 +36,38 @@ func GetRoutes() []config.Route {
 	return *routes
 }
 
-func setDestination(req *http.Request, url *url.URL) {
-	req.URL.Scheme = url.Scheme
-	req.URL.Host = url.Host
-	// Horrible hack to workaround golang behavior with User-Agent: addition
-	// same "fix" as https://github.com/golang/go/commit/6a6c1d9841a1957a2fd292df776ea920ae38ea00
-	if _, ok := req.Header["User-Agent"]; !ok {
-		// explicitly disable User-Agent so it's not set to default value
-		req.Header.Set("User-Agent", "")
-	}
-}
+const noRouteMarker = "no-route"
 
-// Director is the object used by the ReverseProxy to pick the route/destination.
-func Director(req *http.Request) {
+// Rewrite is how incoming request are processed for the ReverseProxy
+// to pick the route/destination.
+func Rewrite(pr *httputil.ProxyRequest) {
 	routes := GetRoutes()
-	log.LogVf("Directing %+v", req)
+	log.LogVf("RP rewrite %+v", pr)
+	req := pr.In
 	for _, route := range routes {
 		log.LogVf("Evaluating req %q vs route %q and path %q vs prefix %q for dest %s",
 			req.Host, route.Host, req.URL.Path, route.Prefix, route.Destination.URL.String())
 		if route.MatchServerReq(req) {
+			pr.SetXForwarded()
+			pr.SetURL(&route.Destination.URL)
 			log.LogRequest(req, route.Destination.Str)
-			setDestination(req, &route.Destination.URL)
 			return
 		}
+	}
+	// No route matched, log and return 404.
+	log.Errf("No route matched for %q %q", req.Host, req.URL.Path)
+	pr.Out.URL.Scheme = noRouteMarker
+}
+
+// ErrorHandler is the error handler for the ReverseProxy. We use
+// a Scheme marker to know that the error is just there was no route
+// and treat that as 404 and everything else remains a 502.
+func ErrorHandler(w http.ResponseWriter, r *http.Request, err error) {
+	if r.URL.Scheme == noRouteMarker {
+		http.Error(w, "No route matched", http.StatusNotFound)
+	} else {
+		log.Errf("Proxy error: %v", err)
+		w.WriteHeader(http.StatusBadGateway)
 	}
 }
 
@@ -78,7 +86,10 @@ func PrintRoutes() {
 func ReverseProxy() *httputil.ReverseProxy {
 	PrintRoutes()
 
-	revp := httputil.ReverseProxy{Director: Director}
+	revp := httputil.ReverseProxy{
+		Rewrite:      Rewrite,
+		ErrorHandler: ErrorHandler,
+	}
 
 	// TODO: make h2c vs regular client more dynamic based on route config instead of all or nothing
 	// (or maybe some day it will just ge the default behavior of the base http client)

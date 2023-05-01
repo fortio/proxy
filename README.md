@@ -9,7 +9,7 @@ Front end for running fortio report for instance standalone with TLS / Autocert 
 
 # Install
 
-using golang 1.18+
+using golang 1.20+ (improved ReverseProxy api and security from 1.18)
 
 ```shell
 go install fortio.org/proxy@latest
