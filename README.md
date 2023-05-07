@@ -1,6 +1,10 @@
 [![Go Reference](https://pkg.go.dev/badge/fortio.org/proxy.svg)](https://pkg.go.dev/fortio.org/proxy)
 [![Go Report Card](https://goreportcard.com/badge/fortio.org/proxy)](https://goreportcard.com/report/fortio.org/proxy)
 [![GitHub Release](https://img.shields.io/github/release/fortio/proxy.svg?style=flat)](https://github.com/fortio/proxy/releases/)
+[![govulncheck](https://img.shields.io/badge/govulncheck-No%20vulnerabilities-success)](https://github.com/fortio/proxy/actions/workflows/gochecks.yml)
+[![golangci-lint](https://img.shields.io/badge/golangci%20lint-No%20issue-success)](https://github.com/fortio/proxy/actions/workflows/gochecks.yml)
+
+
 # Fortio proxy
 
 Fortio simple TLS/ingress autocert proxy
