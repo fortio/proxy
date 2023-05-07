@@ -2,10 +2,10 @@ name: go-checks
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   check:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9 # pin@v4
         with:
-	  check-latest: true
+          check-latest: true
       - name: Run Vulncheck
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
