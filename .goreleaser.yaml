@@ -58,7 +58,7 @@ release:
 brews:
   -
     # GitHub/GitLab repository to push the formula to
-    tap:
+    repository:
       owner: fortio
       name: homebrew-tap
 
