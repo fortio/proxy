@@ -1,7 +1,7 @@
 
 test:
 	go test -race ./...
-	go run -race . -version
+	go run -race . version
 
 test-local:
 	go run -race . -h2 -config-dir sampleConfig/ -redirect-port :8081 -https-port :8443 -http-port :8001
