@@ -5,7 +5,7 @@ go 1.20
 require (
 	fortio.org/cli v1.2.0
 	fortio.org/dflag v1.5.2
-	fortio.org/fortio v1.57.1
+	fortio.org/fortio v1.57.2
 	fortio.org/log v1.7.0
 	fortio.org/scli v1.8.0
 	golang.org/x/crypto v0.11.0
