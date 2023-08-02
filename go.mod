@@ -9,7 +9,7 @@ require (
 	fortio.org/log v1.8.1
 	fortio.org/scli v1.9.0
 	golang.org/x/crypto v0.11.0
-	golang.org/x/net v0.12.0
+	golang.org/x/net v0.13.0
 )
 
 require (
