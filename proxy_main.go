@@ -84,7 +84,8 @@ func main() {
 		IdleTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 3 * time.Second,
 		// The reverse proxy (+debug if configured)
-		Handler: hdlr,
+		Handler:  hdlr,
+		ErrorLog: log.NewStdLogger("rp", log.Error),
 	}
 
 	log.Printf("Fortio Proxy %s started - hostid %q", cli.LongVersion, rp.HostID.Get())
