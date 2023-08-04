@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	fortio.org/cli v1.3.3
-	fortio.org/dflag v1.5.2
+	fortio.org/dflag v1.5.3
 	fortio.org/fortio v1.57.5
 	fortio.org/log v1.9.3
 	fortio.org/scli v1.10.3
