@@ -49,6 +49,7 @@ func Rewrite(pr *httputil.ProxyRequest) {
 			req.Host, route.Host, req.URL.Path, route.Prefix, route.Destination.URL.String())
 		if route.MatchServerReq(req) {
 			pr.SetXForwarded()
+			//nolint:gosec // we return after this so there is only 1 pointer to the URL
 			pr.SetURL(&route.Destination.URL)
 			log.LogRequest(req, route.Destination.Str)
 			return
