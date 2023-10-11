@@ -5,11 +5,11 @@ go 1.20
 require (
 	fortio.org/cli v1.4.2
 	fortio.org/dflag v1.6.0
-	fortio.org/fortio v1.60.1
+	fortio.org/fortio v1.60.3
 	fortio.org/log v1.11.0
 	fortio.org/scli v1.12.0
-	golang.org/x/crypto v0.13.0
-	golang.org/x/net v0.15.0
+	golang.org/x/crypto v0.14.0
+	golang.org/x/net v0.17.0
 )
 
 require (
