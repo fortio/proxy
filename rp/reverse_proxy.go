@@ -97,7 +97,7 @@ func ReverseProxy() *httputil.ReverseProxy {
 	if *h2Target {
 		revp.Transport = &http2.Transport{
 			AllowHTTP: true,
-			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
+			DialTLS: func(network, addr string, _ *tls.Config) (net.Conn, error) {
 				return net.Dial(network, addr)
 			},
 		}
