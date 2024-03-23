@@ -37,3 +37,11 @@ dev:
 	# and curl -H "Host: debug.fortio.org" http://localhost:8000/foo (no redirect with that host header)
 	go run -race . -http-port 8001 -https-port disabled -redirect-port 8000 -hostid "$(shell hostname)-test" \
 		-debug-host "debug.fortio.org" -routes.json '[{"host":"*", "destination":"http://localhost:8080/"}]'
+
+lint: .golangci.yml
+	golangci-lint run
+
+.golangci.yml: Makefile
+	curl -fsS -o .golangci.yml https://raw.githubusercontent.com/fortio/workflows/main/golangci.yml
+
+.PHONY: lint
