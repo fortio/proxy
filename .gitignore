@@ -1,3 +1,5 @@
+.goreleaser.yaml
+.golangci.yml
+proxy
 .vscode
-
 dist/
