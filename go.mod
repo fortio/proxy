@@ -1,6 +1,6 @@
 module fortio.org/proxy
 
-go 1.20
+go 1.21
 
 require (
 	fortio.org/cli v1.6.0

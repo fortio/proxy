@@ -1,4 +1,5 @@
 fortio.org/assert v1.2.1 h1:48I39urpeDj65RP1KguF7akCjILNeu6vICiYMEysR7Q=
+fortio.org/assert v1.2.1/go.mod h1:039mG+/iYDPO8Ibx8TrNuJCm2T2SuhwRI3uL9nHTTls=
 fortio.org/cli v1.6.0 h1:EX9zf+BLzgE+yrq2a3XFZz2F8CK1g9ecJj9ZXVOfoww=
 fortio.org/cli v1.6.0/go.mod h1:QSCd+8OD3MrFKo2XwAHVJJu5gz/U0Jg1Vhse/4nHn3I=
 fortio.org/dflag v1.7.2 h1:lUhXFvDlw4CJj/q7hPv/TC+n/wVoQylzQO6bUg5GQa0=
