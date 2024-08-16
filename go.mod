@@ -3,7 +3,7 @@ module fortio.org/proxy
 go 1.21
 
 require (
-	fortio.org/cli v1.8.0
+	fortio.org/cli v1.9.0
 	fortio.org/dflag v1.7.2
 	fortio.org/fortio v1.66.1
 	fortio.org/log v1.16.0
