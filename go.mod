@@ -8,7 +8,7 @@ require (
 	fortio.org/fortio v1.67.1
 	fortio.org/log v1.17.1
 	fortio.org/scli v1.15.3
-	golang.org/x/crypto v0.27.0
+	golang.org/x/crypto v0.28.0
 	golang.org/x/net v0.29.0
 )
 
@@ -22,6 +22,6 @@ require (
 	github.com/kortschak/goroutine v1.1.2 // indirect
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20240916204253-42ee18b96377 // indirect
 	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e // indirect
-	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/text v0.18.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/text v0.19.0 // indirect
 )
