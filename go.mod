@@ -1,15 +1,14 @@
 module fortio.org/proxy
 
 go 1.21
-
 require (
 	fortio.org/cli v1.9.2
 	fortio.org/dflag v1.7.3
-	fortio.org/fortio v1.67.1
+	fortio.org/fortio v1.68.0
 	fortio.org/log v1.17.1
 	fortio.org/scli v1.15.3
 	golang.org/x/crypto v0.29.0
-	golang.org/x/net v0.30.0
+	golang.org/x/net v0.31.0
 )
 
 require (
