@@ -8,7 +8,7 @@ require (
 	fortio.org/fortio v1.68.0
 	fortio.org/log v1.17.1
 	fortio.org/scli v1.15.3
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.34.0
 	golang.org/x/net v0.34.0
 )
 
