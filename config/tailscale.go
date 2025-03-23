@@ -12,6 +12,8 @@ import (
 	"tailscale.com/client/tailscale"
 )
 
+const HasTailscale = true
+
 // Suffix for server names which will use the tailscale client instead of the autocert client.
 // Not expected to be changed but just in case.
 var TailscaleSuffix = ".ts.net"
@@ -27,7 +29,7 @@ var (
 	tcertOnce sync.Once
 )
 
-func Tailscale() CertGetter {
+func Tailscale() CertificateProvider {
 	tcertOnce.Do(func() {
 		tcert = &tailscale.LocalClient{}
 	})

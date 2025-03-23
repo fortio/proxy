@@ -13,6 +13,8 @@ require (
 	tailscale.com v1.80.3
 )
 
+// Note most of these are coming in because of tailscale, if you want a smaller
+// binary build with -tags no_tailscale
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	fortio.org/safecast v1.0.0 // indirect
