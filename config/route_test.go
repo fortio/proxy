@@ -25,6 +25,7 @@ func TestMatch(t *testing.T) {
 		{`{"host": "www.google.com", "destination": "https://www.google.com/"}`, true},                                 // 8
 		{`{"host": "www.google.com", "destination": "https://www.google.com:443/"}`, true},                             // 9
 		{`{"host": "www.google.com", "destination": "http://www.google.com:443/"}`, true},                              // 10
+		{`{"host": "www.google.com", "destination": "http://www.GOOGLE.com:443/"}`, true},                              // 10
 		{`{"host": "www.google.com", "destination": "https://google.com/"}`, false},                                    // 11
 		{`{"host": "[:1:2", "destination": "http://[:1:2:443]/"}`, false},                                              // 12
 		{`{"host": "[:1:2:443]", "destination": "https://[:1:2:443]/"}`, true},                                         // 13
