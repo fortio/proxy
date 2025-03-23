@@ -1,6 +1,15 @@
+//go:build !no_tailscale
+// +build !no_tailscale
+
 package config
 
-import "strings"
+// build constraints
+
+import (
+	"strings"
+
+	"tailscale.com/client/tailscale"
+)
 
 // Suffix for server names which will use the tailscale client instead of the autocert client.
 // Not expected to be changed but just in case.
@@ -10,4 +19,10 @@ var TailscaleSuffix = ".ts.net"
 // Note the check is expecting lowercase serverName which is what hello.ServerName already is.
 func IsTailscale(serverName string) bool {
 	return strings.HasSuffix(serverName, TailscaleSuffix)
+}
+
+var tcert = &tailscale.LocalClient{}
+
+func Tailscale() CertGetter {
+	return tcert
 }

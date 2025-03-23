@@ -1,3 +1,6 @@
+//go:build !no_tailscale
+// +build !no_tailscale
+
 package config_test
 
 import (

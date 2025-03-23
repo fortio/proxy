@@ -24,7 +24,6 @@ import (
 	"fortio.org/proxy/rp"
 	"fortio.org/scli"
 	"golang.org/x/crypto/acme/autocert"
-	"tailscale.com/client/tailscale"
 )
 
 var (
@@ -36,7 +35,6 @@ var (
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	acert          *autocert.Manager
-	tcert          = &tailscale.LocalClient{}
 )
 
 func hostPolicy(_ context.Context, host string) error {
@@ -57,7 +55,7 @@ func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 		if err := hostPolicy(context.Background(), hello.ServerName); err != nil {
 			return nil, err
 		}
-		return tcert.GetCertificate(hello)
+		return config.Tailscale().GetCertificate(hello)
 	}
 	return acert.GetCertificate(hello)
 }
