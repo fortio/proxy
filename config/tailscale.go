@@ -7,6 +7,7 @@ package config
 
 import (
 	"strings"
+	"sync"
 
 	"tailscale.com/client/tailscale"
 )
@@ -21,8 +22,14 @@ func IsTailscale(serverName string) bool {
 	return strings.HasSuffix(serverName, TailscaleSuffix)
 }
 
-var tcert = &tailscale.LocalClient{}
+var (
+	tcert     *tailscale.LocalClient
+	tcertOnce sync.Once
+)
 
 func Tailscale() CertGetter {
+	tcertOnce.Do(func() {
+		tcert = &tailscale.LocalClient{}
+	})
 	return tcert
 }

@@ -24,3 +24,10 @@ func TestMatch(t *testing.T) {
 		}
 	}
 }
+
+func TestClientNotNil(t *testing.T) {
+	tailscale := config.Tailscale()
+	if tailscale == nil {
+		t.Errorf("Expected non-nil tailscale")
+	}
+}
