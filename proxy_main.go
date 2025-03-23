@@ -36,6 +36,9 @@ var (
 	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	acert          *autocert.Manager
 	tcert          = &tailscale.LocalClient{}
+	// Suffix for server names which will use the tailscale client instead of the autocert client.
+	// Not expected to be changed but just in case.
+	TailscaleSuffix = ".ts.net"
 )
 
 func hostPolicy(_ context.Context, host string) error {
@@ -49,7 +52,7 @@ func hostPolicy(_ context.Context, host string) error {
 
 func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
 	// Note: hello.ServerName is already lowercase.
-	isTailscale := strings.HasSuffix(hello.ServerName, ".ts.net")
+	isTailscale := strings.HasSuffix(hello.ServerName, TailscaleSuffix)
 	log.LogVf("GetCert from %s for %q (tailscale %t)",
 		hello.Conn.RemoteAddr().String(), hello.ServerName, isTailscale)
 	if isTailscale {
