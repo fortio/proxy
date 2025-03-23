@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"sort"
+	"strings"
 	"time"
 
 	"fortio.org/dflag"
@@ -175,7 +176,7 @@ func SafeDebugHandler(w http.ResponseWriter, r *http.Request) {
 func DebugOnHostHandler(normalHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		debugHost := DebugHost.Get()
-		if debugHost != "" && r.Host == debugHost && r.URL.Path != "/favicon.ico" {
+		if debugHost != "" && strings.ToLower(r.Host) == debugHost && r.URL.Path != "/favicon.ico" {
 			GzipDebugHandler.ServeHTTP(w, r)
 		} else {
 			normalHandler(w, r)

@@ -48,8 +48,14 @@ func hostPolicy(_ context.Context, host string) error {
 }
 
 func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
-	log.LogVf("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
-	if strings.HasSuffix(hello.ServerName, ".ts.net") {
+	// Note: hello.ServerName is already lowercase.
+	isTailscale := strings.HasSuffix(hello.ServerName, ".ts.net")
+	log.LogVf("GetCert from %s for %q (tailscale %t)",
+		hello.Conn.RemoteAddr().String(), hello.ServerName, isTailscale)
+	if isTailscale {
+		if err := hostPolicy(context.Background(), hello.ServerName); err != nil {
+			return nil, err
+		}
 		return tcert.GetCertificate(hello)
 	}
 	return acert.GetCertificate(hello)
