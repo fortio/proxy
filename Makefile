@@ -31,7 +31,7 @@ dev-grpc:
 dev-h2c:
 	go run -race . -h2 -http-port 8001 -https-port disabled -redirect-port disabled\
 		-debug-host "debug.fortio.org" \
-		 -routes.json '[{"host":"*", "destination":"http://localhost:8080/"}]'
+		 -default-route http://localhost:8080/
 
 TAILSCALE_SERVERNAME=$(shell tailscale status --json | jq -r '.Self.DNSName | sub("\\.$$"; "")')
 dev-tailscale:

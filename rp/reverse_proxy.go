@@ -29,12 +29,22 @@ var (
 	// optional fortio debug virtual host.
 	DebugHost = dflag.DynString(flag.CommandLine, "debug-host", "",
 		"`hostname` to serve echo debug info on if non-empty (ex: debug.fortio.org)")
+	defaultRoute = dflag.DynString(flag.CommandLine, "default-route", "",
+		"Default `url` to use if no match/no other routes.json is set")
 )
 
 // GetRoutes gets the current routes from the dynamic flag routes.json as object (deserialized).
 func GetRoutes() []config.Route {
-	routes := configs.Get().(*[]config.Route)
-	return *routes
+	routes := *configs.Get().(*[]config.Route)
+	dr := defaultRoute.Get()
+	if dr != "" {
+		dest, err := config.FromString(dr)
+		if err != nil {
+			log.Errf("Error parsing default route %q: %v", dr, err)
+		}
+		routes = append(routes, config.Route{Host: "*", Destination: dest})
+	}
+	return routes
 }
 
 const noRouteMarker = "no-route"
@@ -77,7 +87,7 @@ func PrintRoutes() {
 	if !log.Log(log.Info) {
 		return
 	}
-	log.Printf("Initial Routes (routes.json dynamic flag):")
+	log.Printf("Initial Routes (routes.json and default-route dynamic flags):")
 	for _, r := range GetRoutes() {
 		log.Printf("host %q\t prefix %q\t -> %s", r.Host, r.Prefix, r.Destination.URL.String())
 	}

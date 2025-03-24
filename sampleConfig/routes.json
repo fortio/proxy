@@ -10,9 +10,5 @@
   {
     "prefix": "/grpc.health.v1.Health/Check",
     "destination": "http://127.0.0.1:8079"
-  },
-  {
-    "host": "*",
-    "destination": "http://127.0.0.1:8080"
   }
 ]
