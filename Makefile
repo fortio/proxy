@@ -1,6 +1,7 @@
 
 test:
 	go test -race ./...
+	go test -race -tags no_tailscale ./...
 	go run -race . version
 
 test-local:
@@ -8,7 +9,7 @@ test-local:
 
 
 docker-test:
-	GOOS=linux go build
+	GOOS=linux go build -tags no_tailscale
 	docker build . --tag fortio/proxy:test
 	docker run -v `pwd`/sampleConfig:/etc/fortio-proxy-config fortio/proxy:test
 
@@ -31,6 +32,11 @@ dev-h2c:
 	go run -race . -h2 -http-port 8001 -https-port disabled -redirect-port disabled\
 		-debug-host "debug.fortio.org" \
 		 -routes.json '[{"host":"*", "destination":"http://localhost:8080/"}]'
+
+TAILSCALE_SERVERNAME=$(shell tailscale status --json | jq -r '.Self.DNSName | sub("\\.$$"; "")')
+dev-tailscale:
+	@echo "Visit https://$(TAILSCALE_SERVERNAME)/"
+	go run -race . -loglevel debug -hostid local -certs-domains $(TAILSCALE_SERVERNAME) -debug-host $(TAILSCALE_SERVERNAME)
 
 dev:
 	# Run: curl -H "Host: debug.fortio.org" http://localhost:8001/debug

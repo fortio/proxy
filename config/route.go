@@ -16,6 +16,8 @@ type JSONURL struct {
 
 // Route configuration. Does Host/Prefix match to destination, see Match* functions.
 // (only host,port,scheme part of Destination URL are used).
+// User lowercase for the config. Incoming Host/Authority header will be lowercased.
+// Paths (prefix) are case sensitive.
 type Route struct {
 	// Host or * or empty to match any host (* without a Prefix must be the last rule)
 	Host string
@@ -55,6 +57,7 @@ func (r *Route) MatchHostAndPath(hostPort, path string) bool {
 	if idx != -1 && hostPort[len(hostPort)-1] != ']' { // could be [:some:ip:v6:addr] without :port
 		host = hostPort[:idx]
 	}
+	host = strings.ToLower(host)
 	log.LogVf("path is %q. req host is %q -> %q", path, hostPort, host)
 	if r.Prefix != "" && !strings.HasPrefix(path, r.Prefix) {
 		return false

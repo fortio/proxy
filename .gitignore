@@ -1,3 +1,4 @@
+.DS_Store
 .goreleaser.yaml
 .golangci.yml
 proxy

@@ -20,6 +20,7 @@ import (
 	"fortio.org/dflag"
 	"fortio.org/fortio/fhttp"
 	"fortio.org/log"
+	"fortio.org/proxy/config"
 	"fortio.org/proxy/rp"
 	"fortio.org/scli"
 	"golang.org/x/crypto/acme/autocert"
@@ -46,7 +47,16 @@ func hostPolicy(_ context.Context, host string) error {
 }
 
 func debugGetCert(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
-	log.LogVf("GetCert from %s for %q", hello.Conn.RemoteAddr().String(), hello.ServerName)
+	// Note: hello.ServerName is already lowercase.
+	isTailscale := config.IsTailscale(hello.ServerName)
+	log.LogVf("GetCert from %s for %q (tailscale %t)",
+		hello.Conn.RemoteAddr().String(), hello.ServerName, isTailscale)
+	if isTailscale {
+		if err := hostPolicy(context.Background(), hello.ServerName); err != nil {
+			return nil, err
+		}
+		return config.Tailscale().GetCertificate(hello)
+	}
 	return acert.GetCertificate(hello)
 }
 
@@ -88,7 +98,7 @@ func main() {
 		ErrorLog: log.NewStdLogger("rp", log.Error),
 	}
 
-	log.Printf("Fortio Proxy %s started - hostid %q", cli.LongVersion, rp.HostID.Get())
+	log.Printf("Fortio Proxy %s started - hostid %q - tailscale %t", cli.LongVersion, rp.HostID.Get(), config.HasTailscale)
 
 	if *httpPort != "disabled" {
 		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, hdlr)

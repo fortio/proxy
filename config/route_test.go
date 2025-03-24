@@ -33,6 +33,7 @@ func TestMatch(t *testing.T) {
 		{`{"host": "[:1:2:443]", "destination": "https://[:1:2:443]:673/"}`, true},                                     // 16
 		{`{"host": "[:1:2:443]", "prefix": "/x", "destination": "https://[:1:2:443]:673/y"}`, false},                   // 17
 		{`{"host": "[:1:2:443]", "prefix": "/x", "destination": "https://[:1:2:443]:673/x"}`, true},                    // 18
+		{`{"host": "www.google.com", "destination": "http://www.GOOGLE.com:443/"}`, true},                              // 19
 	}
 	for i, tst := range tests {
 		route := Route{}

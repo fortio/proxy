@@ -11,6 +11,8 @@ Fortio simple TLS/ingress autocert proxy
 
 Front end for running fortio report for instance standalone with TLS / Autocert and routing rules to multiplex multiple service behind a common TLS ingress (works with and allows multiplexing of grpc and h2c servers too)
 
+Any -certs-domains ending with `.ts.net` will be handled by the Tailscale cert client (see https://tailscale.com/kb/1153/enabling-https).
+
 # Install
 
 using golang 1.20+ (improved ReverseProxy api and security from 1.18)
@@ -19,6 +21,8 @@ using golang 1.20+ (improved ReverseProxy api and security from 1.18)
 go install fortio.org/proxy@latest
 sudo setcap CAP_NET_BIND_SERVICE=+eip $(which proxy)
 ```
+
+If you don't need or want the tailscale support, add `-tags no_tailscale` for a much smaller binary.
 
 You can also download one of the many binary [releases](https://github.com/fortio/proxy/releases)
 
