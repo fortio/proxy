@@ -60,3 +60,35 @@ func TestMatch(t *testing.T) {
 		}
 	}
 }
+
+func TestFromStr(t *testing.T) {
+	tests := []struct {
+		urlStr   string
+		err      bool
+		expected string // use "" for same as input
+	}{
+		{"foo bar", true, ""},
+		{"http://www.google.com/", false, ""},
+		{"http:/localhost:8080/", false, ""},
+		{"localhost:8080", false, "http://localhost:8080"},
+	}
+	for i, tst := range tests {
+		u, err := FromString(tst.urlStr)
+		if tst.err { //nolint:nestif // it's not that complicated (and it's a test)
+			if err == nil {
+				t.Errorf("Expected error parsing %q: %+v", tst.urlStr, u)
+			}
+		} else {
+			if err != nil {
+				t.Errorf("Unexpected error parsing %q: %v", tst.urlStr, err)
+			}
+			expected := tst.expected
+			if expected == "" {
+				expected = tst.urlStr
+			}
+			if u.URL.String() != expected {
+				t.Errorf("Mismatch %d expected %v got %v", i, expected, u.URL.String())
+			}
+		}
+	}
+}

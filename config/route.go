@@ -27,6 +27,20 @@ type Route struct {
 	Destination JSONURL
 }
 
+func FromString(urlStr string) (JSONURL, error) {
+	var u JSONURL
+	// special shortcut so "localhost:3000" -> "http://localhost:3000"
+	if !strings.HasPrefix(urlStr, "http") {
+		urlStr = "http://" + urlStr
+	}
+	u.Str = "Proxy to " + urlStr
+	url, err := url.Parse(urlStr)
+	if err == nil {
+		u.URL = *url
+	}
+	return u, err
+}
+
 // UnmarshalJSON is needed to get a URL from json
 // until golang does it on its own.
 func (j *JSONURL) UnmarshalJSON(b []byte) error {
