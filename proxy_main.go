@@ -34,11 +34,16 @@ var (
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
+	autoTailscale  = flag.Bool("tailscale", false, "Automatically add tailscale hostname to the certificate list")
 	acert          *autocert.Manager
+	tailscale      string
 )
 
 func hostPolicy(_ context.Context, host string) error {
 	log.LogVf("cert host policy called for %q", host)
+	if tailscale != "" && host == tailscale {
+		return nil
+	}
 	allowed := certsFor.Get()
 	if _, found := allowed[host]; found {
 		return nil
@@ -78,6 +83,13 @@ func main() {
 		if a == nil {
 			os.Exit(1) // Error already logged
 		}
+	}
+	if *autoTailscale {
+		tailscale = config.TailscaleServerName()
+		if tailscale == "" {
+			os.Exit(1) // Error already logged
+		}
+		log.S(log.Info, "Will accept TLS requests and obtain certificate for tailscale", log.Any("server-name", tailscale))
 	}
 	// Main reverse proxy handler (with debug if configured)
 	var hdlr http.Handler

@@ -11,7 +11,7 @@ Fortio simple TLS/ingress autocert proxy
 
 Front end for running fortio report for instance standalone with TLS / Autocert and routing rules to multiplex multiple service behind a common TLS ingress (works with and allows multiplexing of grpc and h2c servers too)
 
-Any -certs-domains ending with `.ts.net` will be handled by the Tailscale cert client (see https://tailscale.com/kb/1153/enabling-https).
+Any -certs-domains ending with `.ts.net` will be handled by the Tailscale cert client (see https://tailscale.com/kb/1153/enabling-https). Or you can now specify `-tailscale` and it will get the local server name and domain automatically using the tailscale go client api.
 
 # Install
 
@@ -65,3 +65,8 @@ If you want to setup TLS and forward everything to local (h2c) http server runni
 go run fortio.org/proxy@latest -certs-domains ...your..server..full..name -h2 -default-route localhost:3000
 ```
 (`http://` prefix can be omitted in the default route only)
+
+You can get full help/flags using
+```sh
+proxy help
+```

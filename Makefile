@@ -33,10 +33,11 @@ dev-h2c:
 		-debug-host "debug.fortio.org" \
 		 -default-route http://localhost:8080/
 
+# Not needed anymore outside of debughost, -tailscale does this for us
 TAILSCALE_SERVERNAME=$(shell tailscale status --json | jq -r '.Self.DNSName | sub("\\.$$"; "")')
 dev-tailscale:
 	@echo "Visit https://$(TAILSCALE_SERVERNAME)/"
-	go run -race . -loglevel debug -hostid local -certs-domains $(TAILSCALE_SERVERNAME) -debug-host $(TAILSCALE_SERVERNAME)
+	go run -race . -loglevel debug -hostid local -tailscale -debug-host $(TAILSCALE_SERVERNAME)
 
 dev:
 	# Run: curl -H "Host: debug.fortio.org" http://localhost:8001/debug
