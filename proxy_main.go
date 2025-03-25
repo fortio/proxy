@@ -35,7 +35,7 @@ var (
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	autoTailscale  = flag.Bool("tailscale", false, "Automatically add tailscale hostname to the certificate list")
-	timeout        = flag.Duration("timeout", 15*time.Second,
+	timeout        = flag.Duration("timeout", 1*time.Minute,
 		"Maximum duration for each request read/writes proxying (eg 1h or use 0 for no timeout)")
 	acert     *autocert.Manager
 	tailscale string
