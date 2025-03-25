@@ -32,7 +32,7 @@ func Tailscale() CertificateProvider {
 }
 
 func TailscaleServerName() string {
-	status, err := tcli.Status(context.Background())
+	status, err := tcli.StatusWithoutPeers(context.Background())
 	if err != nil {
 		log.Critf("Error getting tailscale status: %v", err)
 		return ""
