@@ -41,7 +41,7 @@ var (
 
 func hostPolicy(_ context.Context, host string) error {
 	log.LogVf("cert host policy called for %q", host)
-	if host == tailscale {
+	if tailscale != "" && host == tailscale {
 		return nil
 	}
 	allowed := certsFor.Get()
@@ -86,6 +86,9 @@ func main() {
 	}
 	if *autoTailscale {
 		tailscale = config.TailscaleServerName()
+		if tailscale == "" {
+			os.Exit(1) // Error already logged
+		}
 		log.S(log.Info, "Will accept TLS requests and obtain certificate for tailscale", log.Any("server-name", tailscale))
 	}
 	// Main reverse proxy handler (with debug if configured)
