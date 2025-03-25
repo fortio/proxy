@@ -35,8 +35,10 @@ var (
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
 	autoTailscale  = flag.Bool("tailscale", false, "Automatically add tailscale hostname to the certificate list")
-	acert          *autocert.Manager
-	tailscale      string
+	timeout        = flag.Duration("timeout", 15*time.Second,
+		"Maximum duration for each request read/writes proxying (eg 1h or use 0 for no timeout)")
+	acert     *autocert.Manager
+	tailscale string
 )
 
 func hostPolicy(_ context.Context, host string) error {
@@ -100,11 +102,10 @@ func main() {
 	}
 
 	s := &http.Server{
-		// TODO: make these timeouts configurable
-		ReadTimeout:       6 * time.Second,
-		WriteTimeout:      6 * time.Second,
+		ReadTimeout:       *timeout,
+		WriteTimeout:      *timeout,
 		IdleTimeout:       15 * time.Second,
-		ReadHeaderTimeout: 3 * time.Second,
+		ReadHeaderTimeout: 3 * time.Second, // reasonably small as the header are sent quickly for valid clients.
 		// The reverse proxy (+debug if configured)
 		Handler:  hdlr,
 		ErrorLog: log.NewStdLogger("rp", log.Error),
