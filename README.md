@@ -65,3 +65,8 @@ If you want to setup TLS and forward everything to local (h2c) http server runni
 go run fortio.org/proxy@latest -certs-domains ...your..server..full..name -h2 -default-route localhost:3000
 ```
 (`http://` prefix can be omitted in the default route only)
+
+You can get full help/flags using
+```sh
+proxy help
+```
