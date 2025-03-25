@@ -70,3 +70,5 @@ You can get full help/flags using
 ```sh
 proxy help
 ```
+
+Use `-timeout 0` or a high value like `1h` if you're going to use it to download/upload large models or otherwise slow transactions. The default is 1 minute maximum.
