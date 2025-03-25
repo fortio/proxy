@@ -14,5 +14,5 @@ func Tailscale() CertificateProvider {
 }
 
 func TailscaleServerName() string {
-	return ""
+	panic("Binary built without tailscale support, rebuild without -tags no_tailscale")
 }

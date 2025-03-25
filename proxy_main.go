@@ -34,7 +34,7 @@ var (
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
-	autoTailscale  = flag.Bool("auto-tailscale", true, "Automatically add tailscale hostname to the certificate list")
+	autoTailscale  = flag.Bool("tailscale", true, "Automatically add tailscale hostname to the certificate list")
 	acert          *autocert.Manager
 	tailscale      string
 )
@@ -86,7 +86,7 @@ func main() {
 	}
 	if *autoTailscale {
 		tailscale = config.TailscaleServerName()
-		log.Infof("Will accept TLS requests and obtain certificate for tailscale server name %q", tailscale)
+		log.S(log.Info, "Will accept TLS requests and obtain certificate for tailscale", log.Any("server-name", tailscale))
 	}
 	// Main reverse proxy handler (with debug if configured)
 	var hdlr http.Handler
