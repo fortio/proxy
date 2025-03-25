@@ -12,3 +12,7 @@ func IsTailscale(_ string) bool {
 func Tailscale() CertificateProvider {
 	return nil
 }
+
+func TailscaleServerName() string {
+	return ""
+}

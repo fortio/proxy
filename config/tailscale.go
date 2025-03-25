@@ -6,9 +6,10 @@ package config
 // build constraints
 
 import (
+	"context"
 	"strings"
-	"sync"
 
+	"fortio.org/log"
 	"tailscale.com/client/tailscale"
 )
 
@@ -24,14 +25,18 @@ func IsTailscale(serverName string) bool {
 	return strings.HasSuffix(serverName, TailscaleSuffix)
 }
 
-var (
-	tcert     *tailscale.LocalClient
-	tcertOnce sync.Once
-)
+var tcli = &tailscale.LocalClient{}
 
 func Tailscale() CertificateProvider {
-	tcertOnce.Do(func() {
-		tcert = &tailscale.LocalClient{}
-	})
-	return tcert
+	return tcli
+}
+
+func TailscaleServerName() string {
+	status, err := tcli.Status(context.Background())
+	if err != nil {
+		log.Critf("Error getting tailscale status: %v", err)
+		return ""
+	}
+	// Remove the trailing dot as it's not there in ServerName.
+	return strings.TrimSuffix(status.Self.DNSName, ".")
 }
