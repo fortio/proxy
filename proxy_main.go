@@ -34,7 +34,7 @@ var (
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
 	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
-	autoTailscale  = flag.Bool("tailscale", true, "Automatically add tailscale hostname to the certificate list")
+	autoTailscale  = flag.Bool("tailscale", false, "Automatically add tailscale hostname to the certificate list")
 	acert          *autocert.Manager
 	tailscale      string
 )
