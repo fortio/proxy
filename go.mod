@@ -2,6 +2,8 @@ module fortio.org/proxy
 
 go 1.23.3
 
+toolchain go1.24.1
+
 require (
 	fortio.org/cli v1.9.2
 	fortio.org/dflag v1.7.3
@@ -9,7 +11,7 @@ require (
 	fortio.org/log v1.17.1
 	fortio.org/scli v1.15.3
 	golang.org/x/crypto v0.36.0
-	golang.org/x/net v0.37.0
+	golang.org/x/net v0.38.0
 	tailscale.com v1.80.3
 )
 
