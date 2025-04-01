@@ -1,8 +1,6 @@
 module fortio.org/proxy
 
-go 1.23.3
-
-toolchain go1.24.1
+go 1.23.8
 
 require (
 	fortio.org/cli v1.9.2
