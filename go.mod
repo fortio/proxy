@@ -2,8 +2,6 @@ module fortio.org/proxy
 
 go 1.23.8
 
-toolchain go1.24.1
-
 require (
 	fortio.org/cli v1.9.2
 	fortio.org/dflag v1.7.3
