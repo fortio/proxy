@@ -5,7 +5,7 @@ go 1.23.8
 require (
 	fortio.org/cli v1.9.2
 	fortio.org/dflag v1.7.3
-	fortio.org/fortio v1.68.2
+	fortio.org/fortio v1.69.0
 	fortio.org/log v1.17.1
 	fortio.org/scli v1.15.3
 	golang.org/x/crypto v0.36.0
@@ -19,7 +19,7 @@ require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	fortio.org/safecast v1.0.0 // indirect
 	fortio.org/sets v1.2.0 // indirect
-	fortio.org/struct2env v0.4.1 // indirect
+	fortio.org/struct2env v0.4.2 // indirect
 	fortio.org/version v1.0.4 // indirect
 	github.com/akutz/memconn v0.1.0 // indirect
 	github.com/alexbrainman/sspi v0.0.0-20231016080023-1a75b4708caa // indirect
@@ -39,7 +39,7 @@ require (
 	github.com/x448/float16 v0.8.4 // indirect
 	go4.org/mem v0.0.0-20240501181205-ae6ca9944745 // indirect
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
-	golang.org/x/crypto/x509roots/fallback v0.0.0-20240916204253-42ee18b96377 // indirect
+	golang.org/x/crypto/x509roots/fallback v0.0.0-20250118192723-a8ea4be81f07 // indirect
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
