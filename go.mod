@@ -4,7 +4,7 @@ go 1.23.8
 
 require (
 	fortio.org/cli v1.9.2
-	fortio.org/dflag v1.7.3
+	fortio.org/dflag v1.8.0
 	fortio.org/fortio v1.69.0
 	fortio.org/log v1.17.1
 	fortio.org/scli v1.15.3
@@ -18,13 +18,13 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	fortio.org/safecast v1.0.0 // indirect
-	fortio.org/sets v1.2.0 // indirect
+	fortio.org/sets v1.3.0 // indirect
 	fortio.org/struct2env v0.4.2 // indirect
 	fortio.org/version v1.0.4 // indirect
 	github.com/akutz/memconn v0.1.0 // indirect
 	github.com/alexbrainman/sspi v0.0.0-20231016080023-1a75b4708caa // indirect
 	github.com/dblohm7/wingoes v0.0.0-20240119213807-a09d6be7affa // indirect
-	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/go-json-experiment/json v0.0.0-20250103232110-6a9a0fde9288 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
