@@ -6,7 +6,7 @@ require (
 	fortio.org/cli v1.9.2
 	fortio.org/dflag v1.7.3
 	fortio.org/fortio v1.69.0
-	fortio.org/log v1.17.1
+	fortio.org/log v1.17.2
 	fortio.org/scli v1.15.3
 	golang.org/x/crypto v0.36.0
 	golang.org/x/net v0.38.0
