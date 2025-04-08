@@ -4,10 +4,10 @@ go 1.23.8
 
 require (
 	fortio.org/cli v1.10.0
-	fortio.org/dflag v1.8.0
+	fortio.org/dflag v1.8.1
 	fortio.org/fortio v1.69.0
 	fortio.org/log v1.17.2
-	fortio.org/scli v1.16.0
+	fortio.org/scli v1.16.1
 	golang.org/x/crypto v0.36.0
 	golang.org/x/net v0.38.0
 	tailscale.com v1.80.3
