@@ -8,8 +8,8 @@ require (
 	fortio.org/fortio v1.69.1
 	fortio.org/log v1.17.2
 	fortio.org/scli v1.16.1
-	golang.org/x/crypto v0.36.0
-	golang.org/x/net v0.38.0
+	golang.org/x/crypto v0.37.0
+	golang.org/x/net v0.39.0
 	tailscale.com v1.80.3
 )
 
@@ -42,7 +42,7 @@ require (
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20250406160420-959f8f3db0fb // indirect
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
 	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	golang.zx2c4.com/wireguard/windows v0.5.3 // indirect
 )
