@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"fortio.org/log"
-	"tailscale.com/client/tailscale"
+	"tailscale.com/client/local"
 )
 
 const HasTailscale = true
@@ -25,7 +25,7 @@ func IsTailscale(serverName string) bool {
 	return strings.HasSuffix(serverName, TailscaleSuffix)
 }
 
-var tcli = &tailscale.LocalClient{}
+var tcli = &local.Client{}
 
 func Tailscale() CertificateProvider {
 	return tcli
