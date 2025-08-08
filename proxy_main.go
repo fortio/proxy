@@ -26,6 +26,10 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 )
 
+const (
+	disabled = "disabled"
+)
+
 var (
 	email    = dflag.DynString(flag.CommandLine, "email", "", "`Email` to attach to cert requests.")
 	certsFor = dflag.DynStringSet(flag.CommandLine, "certs-domains", []string{},
@@ -33,7 +37,7 @@ var (
 	certsDirectory = flag.String("certs-directory", ".", "Directory `path` where to store the certs")
 	port           = flag.String("https-port", ":443", "`port` to listen on for main reverse proxy and tls traffic")
 	redirect       = flag.String("redirect-port", ":80", "`port` to listen on for redirection")
-	httpPort       = flag.String("http-port", "disabled", "`port` to listen on for non tls traffic (or 'disabled')")
+	httpPort       = flag.String("http-port", disabled, "`port` to listen on for non tls traffic (or 'disabled')")
 	autoTailscale  = flag.Bool("tailscale", false, "Automatically add tailscale hostname to the certificate list")
 	timeout        = flag.Duration("timeout", 1*time.Minute,
 		"Maximum duration for each request read/writes proxying (eg 1h or use 0 for no timeout)")
@@ -73,7 +77,7 @@ func main() {
 	// Only turns on debug host if configured at launch,
 	// can be turned off or changed later through dynamic flags but not turned on if starting off
 	debugHost := rp.DebugHost.Get()
-	if *redirect != "disabled" { //nolint:goconst
+	if *redirect != disabled {
 		var a net.Addr
 		if debugHost != "" {
 			// Special case for debug host, redirect to https but also serve debug on that host
@@ -113,11 +117,11 @@ func main() {
 
 	log.Printf("Fortio Proxy %s started - hostid %q - tailscale %t", cli.LongVersion, rp.HostID.Get(), config.HasTailscale)
 
-	if *httpPort != "disabled" {
+	if *httpPort != disabled {
 		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, hdlr)
 	}
 
-	if *port == "disabled" {
+	if *port == disabled {
 		log.Infof("No TLS server port.")
 	} else {
 		go startTLSProxy(s)
