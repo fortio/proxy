@@ -10,7 +10,7 @@ require (
 	fortio.org/scli v1.16.1
 	golang.org/x/crypto v0.41.0
 	golang.org/x/net v0.43.0
-	tailscale.com v1.86.4
+	tailscale.com v1.86.5
 )
 
 // Note most of these are coming in because of tailscale, if you want a smaller
