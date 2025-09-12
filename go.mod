@@ -1,6 +1,7 @@
 module fortio.org/proxy
 
-go 1.24.6
+// should be 1.24.0 but tailscale is not playing along
+go 1.24.7
 
 require (
 	fortio.org/cli v1.11.0
@@ -13,12 +14,11 @@ require (
 	tailscale.com v1.86.5
 )
 
-require fortio.org/duration v1.0.4 // indirect
-
 // Note most of these are coming in because of tailscale, if you want a smaller
 // binary build with -tags no_tailscale
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	fortio.org/duration v1.0.4 // indirect
 	fortio.org/safecast v1.2.0 // indirect
 	fortio.org/sets v1.3.0 // indirect
 	fortio.org/struct2env v0.4.2 // indirect
