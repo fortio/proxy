@@ -3,15 +3,17 @@ module fortio.org/proxy
 go 1.24.6
 
 require (
-	fortio.org/cli v1.10.0
-	fortio.org/dflag v1.8.1
-	fortio.org/fortio v1.71.2
+	fortio.org/cli v1.11.0
+	fortio.org/dflag v1.9.2
+	fortio.org/fortio v1.72.0
 	fortio.org/log v1.17.2
-	fortio.org/scli v1.16.1
+	fortio.org/scli v1.17.1
 	golang.org/x/crypto v0.41.0
 	golang.org/x/net v0.43.0
 	tailscale.com v1.86.5
 )
+
+require fortio.org/duration v1.0.4 // indirect
 
 // Note most of these are coming in because of tailscale, if you want a smaller
 // binary build with -tags no_tailscale
