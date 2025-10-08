@@ -10,7 +10,7 @@ require (
 	fortio.org/log v1.17.2
 	fortio.org/scli v1.17.1
 	golang.org/x/crypto v0.42.0
-	golang.org/x/net v0.44.0
+	golang.org/x/net v0.45.0
 	tailscale.com v1.86.5
 )
 
