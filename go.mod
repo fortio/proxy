@@ -4,11 +4,11 @@ module fortio.org/proxy
 go 1.24.7
 
 require (
-	fortio.org/cli v1.11.0
+	fortio.org/cli v1.12.2
 	fortio.org/dflag v1.9.2
 	fortio.org/fortio v1.72.0
-	fortio.org/log v1.17.2
-	fortio.org/scli v1.17.1
+	fortio.org/log v1.18.1
+	fortio.org/scli v1.18.1
 	golang.org/x/crypto v0.42.0
 	golang.org/x/net v0.44.0
 	tailscale.com v1.86.5
@@ -34,7 +34,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hdevalence/ed25519consensus v0.2.0 // indirect
 	github.com/jsimonetti/rtnetlink v1.4.0 // indirect
-	github.com/kortschak/goroutine v1.1.2 // indirect
+	github.com/kortschak/goroutine v1.1.3 // indirect
 	github.com/mdlayher/netlink v1.7.3-0.20250113171957-fbb4dce95f42 // indirect
 	github.com/mdlayher/socket v0.5.0 // indirect
 	github.com/mitchellh/go-ps v1.0.0 // indirect
