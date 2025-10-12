@@ -27,7 +27,7 @@ var (
 	h2Target  = flag.Bool("h2", false, "Whether destinations support h2c prior knowledge")
 	HostID    = dflag.DynString(flag.CommandLine, "hostid", "", "host id to show in debug-host output")
 	startTime = time.Now()
-	// optional fortio debug virtual host.
+	// DebugHost is theoptional fortio debug virtual host.
 	DebugHost = dflag.DynString(flag.CommandLine, "debug-host", "",
 		"`hostname` to serve echo debug info on if non-empty (ex: debug.fortio.org)")
 	defaultRoute = dflag.DynString(flag.CommandLine, "default-route", "",
@@ -120,7 +120,7 @@ func ReverseProxy() *httputil.ReverseProxy {
 // GzipDebugHandler is a handler wrapping SafeDebugHandler with optional gzip compression.
 var GzipDebugHandler = fhttp.Gzip(http.HandlerFunc(SafeDebugHandler))
 
-// DebugHandler is similar to Fortio's DebugHandler,
+// SafeDebugHandler is similar to Fortio's DebugHandler,
 // it returns debug/useful info to http client.
 // but doesn't have some of the extra sensitive info like env dump
 // and host name or echo delay or header setting options.
