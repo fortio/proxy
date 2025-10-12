@@ -15,7 +15,7 @@ import (
 
 const HasTailscale = true
 
-// Suffix for server names which will use the tailscale client instead of the autocert client.
+// TailscaleSuffix is the suffix for server names which will use the tailscale client instead of the autocert client.
 // Not expected to be changed but just in case.
 var TailscaleSuffix = ".ts.net"
 

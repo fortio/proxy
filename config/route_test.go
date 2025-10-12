@@ -26,13 +26,13 @@ func TestMatch(t *testing.T) {
 		{`{"host": "www.google.com", "destination": "https://www.google.com:443/"}`, true},                             // 9
 		{`{"host": "www.google.com", "destination": "http://www.google.com:443/"}`, true},                              // 10
 		{`{"host": "www.google.com", "destination": "https://google.com/"}`, false},                                    // 11
-		{`{"host": "[:1:2", "destination": "http://[:1:2:443]/"}`, false},                                              // 12
-		{`{"host": "[:1:2:443]", "destination": "https://[:1:2:443]/"}`, true},                                         // 13
-		{`{"host": "[:1:2:443]", "destination": "http://[:1:2:443]/"}`, true},                                          // 14
-		{`{"host": "[:1:2:443]", "destination": "https://[:1:2:443]/"}`, true},                                         // 15
-		{`{"host": "[:1:2:443]", "destination": "https://[:1:2:443]:673/"}`, true},                                     // 16
-		{`{"host": "[:1:2:443]", "prefix": "/x", "destination": "https://[:1:2:443]:673/y"}`, false},                   // 17
-		{`{"host": "[:1:2:443]", "prefix": "/x", "destination": "https://[:1:2:443]:673/x"}`, true},                    // 18
+		{`{"host": "[::1:2:3]", "destination": "http://[::1:2:4]/"}`, false},                                           // 12
+		{`{"host": "[::1:2:3]", "destination": "https://[::1:2:3]:443/"}`, true},                                       // 13
+		{`{"host": "[::1:2:3]", "destination": "http://[::1:2:3]:443/"}`, true},                                        // 14
+		{`{"host": "[::1:2:3]", "destination": "https://[::1:2:3]:443/"}`, true},                                       // 15
+		{`{"host": "[::1:2:3]", "destination": "https://[::1:2:3]:673/"}`, true},                                       // 16
+		{`{"host": "[::1:2:3]", "prefix": "/x", "destination": "https://[::1:2:3]:673/y"}`, false},                     // 17
+		{`{"host": "[::1:2:3]", "prefix": "/x", "destination": "https://[::1:2:3]:673/x"}`, true},                      // 18
 		{`{"host": "www.google.com", "destination": "http://www.GOOGLE.com:443/"}`, true},                              // 19
 	}
 	for i, tst := range tests {
