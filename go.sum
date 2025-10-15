@@ -44,8 +44,8 @@ github.com/fxamacker/cbor/v2 v2.7.0 h1:iM5WgngdRBanHcxugY4JySA0nk1wZorNOpTgCMedv
 github.com/fxamacker/cbor/v2 v2.7.0/go.mod h1:pxXPTn3joSm21Gbwsv0w9OSA2y1HFR9qXEeXQVeNoDQ=
 github.com/gaissmai/bart v0.18.0 h1:jQLBT/RduJu0pv/tLwXE+xKPgtWJejbxuXAR+wLJafo=
 github.com/gaissmai/bart v0.18.0/go.mod h1:JJzMAhNF5Rjo4SF4jWBrANuJfqY+FvsFhW7t1UZJ+XY=
-github.com/go-json-experiment/json v0.0.0-20250223041408-d3c622f1b874 h1:F8d1AJ6M9UQCavhwmO6ZsrYLfG8zVFWfEfMS2MXPkSY=
-github.com/go-json-experiment/json v0.0.0-20250223041408-d3c622f1b874/go.mod h1:TiCD2a1pcmjd7YnhGH0f/zKNcCD06B029pHhzV23c2M=
+github.com/go-json-experiment/json v0.0.0-20250813024750-ebf49471dced h1:Q311OHjMh/u5E2TITc++WlTP5We0xNseRMkHDyvhW7I=
+github.com/go-json-experiment/json v0.0.0-20250813024750-ebf49471dced/go.mod h1:TiCD2a1pcmjd7YnhGH0f/zKNcCD06B029pHhzV23c2M=
 github.com/go-ole/go-ole v1.3.0 h1:Dt6ye7+vXGIKZ7Xtk4s6/xVdGDQynvom7xCFEdWr6uE=
 github.com/go-ole/go-ole v1.3.0/go.mod h1:5LS6F96DhAwUc7C+1HLexzMXY1xGRSryjyPPKW6zv78=
 github.com/godbus/dbus/v5 v5.1.1-0.20230522191255-76236955d466 h1:sQspH8M4niEijh3PFscJRLDnkL547IeP7kpPe3uUhEg=
@@ -88,8 +88,8 @@ github.com/tailscale/netlink v1.1.1-0.20240822203006-4d49adab4de7 h1:uFsXVBE9Qr4
 github.com/tailscale/netlink v1.1.1-0.20240822203006-4d49adab4de7/go.mod h1:NzVQi3Mleb+qzq8VmcWpSkcSYxXIg0DkI6XDzpVkhJ0=
 github.com/tailscale/wireguard-go v0.0.0-20250716170648-1d0488a3d7da h1:jVRUZPRs9sqyKlYHHzHjAqKN+6e/Vog6NpHYeNPJqOw=
 github.com/tailscale/wireguard-go v0.0.0-20250716170648-1d0488a3d7da/go.mod h1:BOm5fXUBFM+m9woLNBoxI9TaBXXhGNP50LX/TGIvGb4=
-github.com/vishvananda/netns v0.0.4 h1:Oeaw1EM2JMxD51g9uhtC0D7erkIjgmj8+JZc26m1YX8=
-github.com/vishvananda/netns v0.0.4/go.mod h1:SpkAiCQRtJ6TvvxPnOSyH3BMl6unz3xZlaprSwhNNJM=
+github.com/vishvananda/netns v0.0.5 h1:DfiHV+j8bA32MFM7bfEunvT8IAqQ/NzSJHtcmW5zdEY=
+github.com/vishvananda/netns v0.0.5/go.mod h1:SpkAiCQRtJ6TvvxPnOSyH3BMl6unz3xZlaprSwhNNJM=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
 go4.org/mem v0.0.0-20240501181205-ae6ca9944745 h1:Tl++JLUCe4sxGu8cTpDzRLd3tN7US4hOxG5YpKCzkek=
@@ -120,5 +120,5 @@ golang.zx2c4.com/wireguard/windows v0.5.3 h1:On6j2Rpn3OEMXqBq00QEDC7bWSZrPIHKIus
 golang.zx2c4.com/wireguard/windows v0.5.3/go.mod h1:9TEe8TJmtwyQebdFwAkEWOPr3prrtqm+REGFifP60hI=
 gvisor.dev/gvisor v0.0.0-20250205023644-9414b50a5633 h1:2gap+Kh/3F47cO6hAu3idFvsJ0ue6TRcEi2IUkv/F8k=
 gvisor.dev/gvisor v0.0.0-20250205023644-9414b50a5633/go.mod h1:5DMfjtclAbTIjbXqO1qCe2K5GKKxWz2JHvCChuTcJEM=
-tailscale.com v1.86.5 h1:yBtWFjuLYDmxVnfnvPbZNZcKADCYgNfMd0rUAOA9XCs=
-tailscale.com v1.86.5/go.mod h1:Lm8dnzU2i/Emw15r6sl3FRNp/liSQ/nYw6ZSQvIdZ1M=
+tailscale.com v1.88.4 h1:fXWotRMi9ZARyHRdKQa4ohXj8kqtemvvTzjreWLHVHo=
+tailscale.com v1.88.4/go.mod h1:LHaTiwRgzebPDLgZ6RQQVzX+1SR5fbNl51fzm7UtMaw=
