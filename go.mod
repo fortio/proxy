@@ -1,7 +1,7 @@
 module fortio.org/proxy
 
 // should be 1.24.0 but tailscale is not playing along
-go 1.24.7
+go 1.25.3
 
 require (
 	fortio.org/cli v1.12.2
@@ -11,7 +11,7 @@ require (
 	fortio.org/scli v1.18.1
 	golang.org/x/crypto v0.43.0
 	golang.org/x/net v0.46.0
-	tailscale.com v1.86.5
+	tailscale.com v1.90.4
 )
 
 // Note most of these are coming in because of tailscale, if you want a smaller
@@ -24,12 +24,11 @@ require (
 	fortio.org/struct2env v0.4.2 // indirect
 	fortio.org/version v1.0.4 // indirect
 	github.com/akutz/memconn v0.1.0 // indirect
-	github.com/alexbrainman/sspi v0.0.0-20231016080023-1a75b4708caa // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/dblohm7/wingoes v0.0.0-20240119213807-a09d6be7affa // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
-	github.com/go-json-experiment/json v0.0.0-20250223041408-d3c622f1b874 // indirect
+	github.com/go-json-experiment/json v0.0.0-20250813024750-ebf49471dced // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hdevalence/ed25519consensus v0.2.0 // indirect
