@@ -4,11 +4,11 @@ module fortio.org/proxy
 go 1.24.7
 
 require (
-	fortio.org/cli v1.12.2
-	fortio.org/dflag v1.9.2
+	fortio.org/cli v1.12.3
+	fortio.org/dflag v1.9.3
 	fortio.org/fortio v1.73.0
-	fortio.org/log v1.18.1
-	fortio.org/scli v1.18.1
+	fortio.org/log v1.18.3
+	fortio.org/scli v1.19.0
 	golang.org/x/crypto v0.43.0
 	golang.org/x/net v0.46.0
 	tailscale.com v1.86.5
@@ -45,7 +45,7 @@ require (
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20250406160420-959f8f3db0fb // indirect
 	golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac // indirect
 	golang.org/x/sync v0.17.0 // indirect
-	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.30.0 // indirect
 	golang.zx2c4.com/wireguard/windows v0.5.3 // indirect
 )
