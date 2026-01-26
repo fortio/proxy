@@ -36,6 +36,14 @@ func TailscaleServerName() string {
 		log.Critf("Error getting tailscale status: %v", err)
 		return ""
 	}
+	if status.Self == nil {
+		log.Critf("No self info in tailscale status: %+v", status)
+		return ""
+	}
+	if status.Self.DNSName == "" {
+		log.Critf("No DNSName in tailscale self info - check if tailscale is running?")
+		return ""
+	}
 	// Remove the trailing dot as it's not there in ServerName.
 	return strings.TrimSuffix(status.Self.DNSName, ".")
 }
