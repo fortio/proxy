@@ -115,7 +115,8 @@ func main() {
 		ErrorLog: log.NewStdLogger("rp", log.Error),
 	}
 
-	log.Printf("Fortio Proxy %s started - hostid %q - tailscale capable: %t, on: %t", cli.LongVersion, rp.HostID.Get(), config.HasTailscale, *autoTailscale)
+	log.Printf("Fortio Proxy %s started - hostid %q - tailscale capable: %t, on: %t",
+		cli.LongVersion, rp.HostID.Get(), config.HasTailscale, *autoTailscale)
 
 	if *httpPort != disabled {
 		fhttp.HTTPServerWithHandler("http-reverse-proxy", *httpPort, hdlr)
