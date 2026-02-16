@@ -6,7 +6,7 @@ go 1.24.7
 require (
 	fortio.org/cli v1.12.3
 	fortio.org/dflag v1.9.3
-	fortio.org/fortio v1.73.2
+	fortio.org/fortio v1.74.0
 	fortio.org/log v1.18.3
 	fortio.org/scli v1.19.0
 	golang.org/x/crypto v0.48.0
