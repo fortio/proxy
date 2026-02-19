@@ -17,7 +17,7 @@ require (
 // Note most of these are coming in because of tailscale, if you want a smaller
 // binary build with -tags no_tailscale
 require (
-	filippo.io/edwards25519 v1.1.0 // indirect
+	filippo.io/edwards25519 v1.1.1 // indirect
 	fortio.org/duration v1.0.4 // indirect
 	fortio.org/safecast v1.2.0 // indirect
 	fortio.org/sets v1.3.0 // indirect
