@@ -1,7 +1,7 @@
 module fortio.org/proxy
 
 // should be 1.24.0 but tailscale is not playing along
-go 1.24.7
+go 1.25.0
 
 require (
 	fortio.org/cli v1.12.3
@@ -10,7 +10,7 @@ require (
 	fortio.org/log v1.18.3
 	fortio.org/scli v1.19.0
 	golang.org/x/crypto v0.48.0
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.51.0
 	tailscale.com v1.86.5
 )
 
