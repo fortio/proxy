@@ -137,7 +137,7 @@ func SafeDebugHandler(w http.ResponseWriter, r *http.Request) {
 		buf.WriteString(id)
 	}
 	buf.WriteString(" up for ")
-	buf.WriteString(fmt.Sprint(fhttp.RoundDuration(time.Since(startTime))))
+	fmt.Fprint(&buf, fhttp.RoundDuration(time.Since(startTime)))
 	buf.WriteString("\nRequest from ")
 	buf.WriteString(r.RemoteAddr)
 	buf.WriteString(log.TLSInfo(r))
