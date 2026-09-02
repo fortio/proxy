@@ -6,11 +6,11 @@ go 1.25.0
 require (
 	fortio.org/cli v1.12.3
 	fortio.org/dflag v1.9.3
-	fortio.org/fortio v1.75.2
+	fortio.org/fortio v1.75.3
 	fortio.org/log v1.18.3
 	fortio.org/scli v1.19.0
 	golang.org/x/crypto v0.55.0
-	golang.org/x/net v0.57.0
+	golang.org/x/net v0.58.0
 	tailscale.com v1.86.5
 )
 
