@@ -1,7 +1,7 @@
 module fortio.org/proxy
 
 // should be 1.24.0 but tailscale is not playing along
-go 1.25.0
+go 1.26.0
 
 require (
 	fortio.org/cli v1.12.3
@@ -9,8 +9,8 @@ require (
 	fortio.org/fortio v1.75.2
 	fortio.org/log v1.18.3
 	fortio.org/scli v1.19.0
-	golang.org/x/crypto v0.55.0
-	golang.org/x/net v0.57.0
+	golang.org/x/crypto v0.57.0
+	golang.org/x/net v0.59.0
 	tailscale.com v1.86.5
 )
 
@@ -44,8 +44,8 @@ require (
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20250406160420-959f8f3db0fb // indirect
 	golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac // indirect
-	golang.org/x/sync v0.22.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.41.0 // indirect
+	golang.org/x/sync v0.23.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
 	golang.zx2c4.com/wireguard/windows v0.5.3 // indirect
 )
