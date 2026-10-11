@@ -13,8 +13,6 @@ require (
 	tailscale.com v1.86.5
 )
 
-require golang.org/x/net v0.61.0 // indirect
-
 // Note most of these are coming in because of tailscale, if you want a smaller
 // binary build with -tags no_tailscale
 require (
@@ -45,6 +43,7 @@ require (
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20250406160420-959f8f3db0fb // indirect
 	golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac // indirect
+	golang.org/x/net v0.61.0 // indirect
 	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
