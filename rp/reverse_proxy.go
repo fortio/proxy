@@ -2,12 +2,9 @@ package rp
 
 import (
 	"bytes"
-	"context"
-	"crypto/tls"
 	"flag"
 	"fmt"
 	"io"
-	"net"
 	"net/http"
 	"net/http/httputil"
 	"sort"
@@ -19,7 +16,6 @@ import (
 	"fortio.org/fortio/version"
 	"fortio.org/log"
 	"fortio.org/proxy/config"
-	"golang.org/x/net/http2"
 )
 
 var (
@@ -106,13 +102,11 @@ func ReverseProxy() *httputil.ReverseProxy {
 	// TODO: make h2c vs regular client more dynamic based on route config instead of all or nothing
 	// (or maybe some day it will just ge the default behavior of the base http client)
 	if *h2Target {
-		revp.Transport = &http2.Transport{
-			AllowHTTP: true,
-			DialTLSContext: func(ctx context.Context, network, addr string, _ *tls.Config) (net.Conn, error) {
-				dialer := &net.Dialer{}
-				return dialer.DialContext(ctx, network, addr)
-			},
-		}
+		// h2c (prior knowledge) only.
+		tr := http.DefaultTransport.(*http.Transport).Clone()
+		tr.Protocols = new(http.Protocols)
+		tr.Protocols.SetUnencryptedHTTP2(true)
+		revp.Transport = tr
 	}
 	return &revp
 }

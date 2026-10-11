@@ -10,9 +10,10 @@ require (
 	fortio.org/log v1.18.3
 	fortio.org/scli v1.19.0
 	golang.org/x/crypto v0.58.0
-	golang.org/x/net v0.61.0
 	tailscale.com v1.86.5
 )
+
+require golang.org/x/net v0.61.0 // indirect
 
 // Note most of these are coming in because of tailscale, if you want a smaller
 // binary build with -tags no_tailscale
