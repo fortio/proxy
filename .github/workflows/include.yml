@@ -11,7 +11,7 @@ on:
 
 jobs:
     call-gochecks:
-        uses: fortio/workflows/.github/workflows/gochecks.yml@vulnpanic
+        uses: fortio/workflows/.github/workflows/gochecks.yml@main
     call-codecov:
         uses: fortio/workflows/.github/workflows/codecov.yml@main
         secrets:
