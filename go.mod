@@ -8,7 +8,7 @@ require (
 	fortio.org/dflag v1.9.3
 	fortio.org/fortio v1.76.0
 	fortio.org/log v1.18.3
-	fortio.org/scli v1.19.0
+	fortio.org/scli v1.20.0
 	golang.org/x/crypto v0.58.0
 	tailscale.com v1.94.2
 )
@@ -44,7 +44,7 @@ require (
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
 	golang.org/x/net v0.61.0 // indirect
 	golang.org/x/sync v0.24.0 // indirect
-	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
 	golang.zx2c4.com/wireguard/windows v0.5.3 // indirect
 )
