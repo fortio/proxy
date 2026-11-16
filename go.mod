@@ -8,7 +8,7 @@ require (
 	fortio.org/dflag v1.9.3
 	fortio.org/fortio v1.76.0
 	fortio.org/log v1.18.3
-	fortio.org/scli v1.19.0
+	fortio.org/scli v1.20.0
 	golang.org/x/crypto v0.59.0
 	tailscale.com v1.94.2
 )
